@@ -1,0 +1,17 @@
+
+/* Le rectangle autour de la valeur */
+.champ-valeur-statique {
+    padding: 8px 12px;
+    border: 2px solid #007bff; /* Couleur de bordure pour l'effet rectangle */
+    border-radius: 4px;
+    color: #333;
+}
+
+.btn-supprimer {
+    background: none;
+    border: none;
+    color: #ff4d4d;
+    cursor: pointer;
+    font-weight: bold;
+    padding: 5px;
+}
