@@ -1,4 +1,5 @@
 import json
+import datetime
 
 # Chargement du json en global
 with open("ressources/publications.json", "r", encoding="utf-8") as f:
@@ -93,7 +94,46 @@ def getLocFromName(nomOrga: str):
 #print(getLocFromName("COMMUNAUTE URBAINE DE LE MANS METROPOLE")) ne pas utiliser pour le moment car adresse a mont de marsan
 #print(getLocFromName("UNIVERSITE DU MANS"))
 
+def getFirtDate():
+    firstDate = datetime.date(9999, 12, 31)
+
+    for p in data.values():
+        date_str = p["project"]["startDate"]
+
+        year = int(date_str[0:4])
+        month = int(date_str[5:7])
+        day = int(date_str[8:10])
+
+        dateTemp = datetime.date(year, month, day)
+
+        if dateTemp < firstDate:
+            firstDate = dateTemp
+    
+    return firstDate
+
+
+def getLastDate():
+    lastDate = datetime.date(1, 1, 1)
+
+    for p in data.values():
+        date_str = p["project"]["endDate"]
+
+        year = int(date_str[0:4])
+        month = int(date_str[5:7])
+        day = int(date_str[8:10])
+
+        dateTemp = datetime.date(year, month, day)
+
+        if dateTemp > lastDate:
+            lastDate = dateTemp
+    
+    return lastDate
+
+
 listeContributeurs = getListContributors("UNIVERSITE DU MANS")
+
+print(getFirtDate())
+print(getLastDate())
 
 for orga in listeContributeurs:
     print(getLocFromName(orga))
