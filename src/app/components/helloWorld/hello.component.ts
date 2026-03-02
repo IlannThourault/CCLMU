@@ -1,12 +1,12 @@
 import { Component } from '@angular/core';
-import { FormsModule } from '@angular/forms';
+import { CommonModule } from '@angular/common';
+import { FormsModule } from '@angular/forms';  // <-- important pour ngModel
 
 @Component({
   selector: 'app-hello',
   standalone: true,
-  imports: [FormsModule],
   templateUrl: './hello.component.html',
-  styleUrl: './hello.component.scss'
+  imports: [CommonModule, FormsModule]  // <-- FormsModule ajouté ici
 })
 export class HelloComponent {
   query1: string = '';

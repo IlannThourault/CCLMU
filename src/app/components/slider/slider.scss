@@ -1,0 +1,50 @@
+.slider {
+  position: relative;
+  height: 500px;
+  width: 120px;
+  margin: 40px;
+}
+
+.track {
+  position: absolute;
+  left: 50%;
+  width: 6px;
+  height: 100%;
+  background: #EDEBE5;
+  transform: translateX(-50%);
+  border-radius: 4px;
+}
+
+.range {
+  position: absolute;
+  left: 50%;
+  width: 6px;
+  background: #4F6814 ;
+  transform: translateX(-50%);
+  border-radius: 4px;
+}
+
+.thumb {
+  position: absolute;
+  left: 50%;
+  width: 22px;
+  height: 22px;
+  background: #EDEBE5;
+  border: 2px solid #555;
+  border-radius: 50%;
+  transform: translate(-50%, -50%);
+  cursor: pointer;
+  transition: transform 0.1s ease;
+}
+
+.thumb:hover {
+  transform: translate(-50%, -50%) scale(1.1);
+}
+
+.label {
+  position: absolute;
+  left: 100px;
+  transform: translateY(-50%);
+  font-size: 18px;
+  color: #2c3e50;
+}

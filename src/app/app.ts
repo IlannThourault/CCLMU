@@ -1,14 +1,15 @@
 import { Component, signal } from '@angular/core';
 import { RouterOutlet } from '@angular/router';
 import { HelloComponent } from './components/helloWorld/hello.component';
+import { SliderComponent } from './components/slider/slider';
 
 
 @Component({
   selector: 'app-root',
   standalone: true,
-  imports: [RouterOutlet, HelloComponent],
+  imports: [RouterOutlet, HelloComponent, SliderComponent],
   templateUrl: './app.html',
-  styleUrl: './app.scss'
+  styleUrls: ['./app.scss']
 })
 
 export class App {
