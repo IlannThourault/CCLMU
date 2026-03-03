@@ -9,6 +9,14 @@ load_dotenv("../.private_env")
 username = os.getenv("SCANR_USERNAME")
 password = os.getenv("SCANR_PASSWORD")
 
+if (username is None):
+  print("Error : Failed to fetch .private_env::SCANR_USERNAME")
+  exit()
+if (password is None):
+  print("Error : Failed to fetch .private_env::SCANR_PASSWORD")
+  exit()
+
+
 url = "https://cluster-production.elasticsearch.dataesr.ovh/scanr-organizations/_search"
 
 headers = {
