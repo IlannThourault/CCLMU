@@ -10,8 +10,7 @@
   <!-- START -->
   <div class="thumb"
        [style.top.%]="startPos * 100"
-       (mousedown)="startDrag('start', $event)"
-       (click)="openCalendar('start', picker)">
+       (mousedown)="startDrag('start', $event)">
   </div>
 
   <div class="label"
@@ -22,8 +21,7 @@
   <!-- END -->
   <div class="thumb"
        [style.top.%]="endPos * 100"
-       (mousedown)="startDrag('end', $event)"
-       (click)="openCalendar('end', picker)">
+       (mousedown)="startDrag('end', $event)">
   </div>
 
   <div class="label"
@@ -32,11 +30,3 @@
   </div>
 
 </div>
-
-<!-- Datepicker caché -->
-<input matInput
-       [matDatepicker]="picker"
-       style="visibility:hidden; position:absolute;"
-       (dateChange)="onDateSelected($any($event).value)">
-
-<mat-datepicker #picker></mat-datepicker>

@@ -38,13 +38,16 @@
 }
 
 .thumb:hover {
-  transform: translate(-50%, -50%) scale(1.1);
+  transform: translate(-50%, -50%) scale(1.2);
 }
 
 .label {
   position: absolute;
   left: 100px;
   transform: translateY(-50%);
-  font-size: 18px;
-  color: #2c3e50;
+  font-size: 20px;
+  color: #EDEBE5;
+  background-color: #4F6814;
+  padding: 1em;
+  border-radius: 25px;
 }
