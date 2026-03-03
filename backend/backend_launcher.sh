@@ -1,9 +1,9 @@
 #!/bin/activate
 
-if [ -f "../.env" ];then
-    source ../.env
+if [ -f "../.public_env" ];then
+    source ../.public_env
 else
-    echo "Error : .env or ../.env not found"
+    echo "Error : .public_env or ../.public_env not found"
     exit 1
 fi
 
