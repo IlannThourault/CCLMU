@@ -6,8 +6,9 @@ import { MapComponent } from './components/mapComponent/mapComponent';
   selector: 'app-root',
   imports: [RouterOutlet, MapComponent],
   templateUrl: './app.html',
-  styleUrl: './app.scss'
+  styleUrls: ['./app.scss']
 })
+
 export class App {
   protected readonly title = signal('CCLMU');
 }

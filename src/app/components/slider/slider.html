@@ -1,0 +1,32 @@
+<div class="slider" #slider>
+
+  <div class="track"></div>
+
+  <div class="range"
+       [style.top.%]="startPos * 100"
+       [style.height.%]="(endPos - startPos) * 100">
+  </div>
+
+  <!-- START -->
+  <div class="thumb"
+       [style.top.%]="startPos * 100"
+       (mousedown)="startDrag('start', $event)">
+  </div>
+
+  <div class="label"
+       [style.top.%]="startPos * 100">
+    {{ startDate | date:'MMMM yyyy' }}
+  </div>
+
+  <!-- END -->
+  <div class="thumb"
+       [style.top.%]="endPos * 100"
+       (mousedown)="startDrag('end', $event)">
+  </div>
+
+  <div class="label"
+       [style.top.%]="endPos * 100">
+    {{ endDate | date:'MMMM yyyy' }}
+  </div>
+
+</div>
