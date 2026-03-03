@@ -20,6 +20,7 @@ fi
 
 # Installation des requirements
 if [ -f ".requirements" ];then
+    pip install --upgrade pip
     pip install -r .requirements
 else
     echo "Error : .requirements file needed"
