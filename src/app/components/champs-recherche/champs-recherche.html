@@ -1,0 +1,20 @@
+<div class="champs-recherche-container">
+  <h3>Champs de recherche ajoutés ({{ nombreChamps() }})</h3>
+  
+  <div *ngIf="champs().length === 0" class="message-vide">
+    <p>Aucun champ de recherche ajouté.</p>
+  </div>
+
+  <div class="liste-champs" *ngIf="champs().length > 0">
+    <div *ngFor="let champ of champs()" class="champ-item">
+      <div class="champ-content-horizontal">
+        <div class="champ-valeur-statique">
+          {{ champ.valeur }}
+        </div>
+        <button (click)="supprimerChamp(champ.id)" class="btn-supprimer" title="Supprimer">
+          ✕
+        </button>
+      </div>
+    </div>
+  </div>
+</div>
