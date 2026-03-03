@@ -19,18 +19,49 @@ import { CommonModule, DatePipe } from '@angular/common';
 })
 export class SliderComponent {
 
-  @ViewChild('slider', { static: true }) slider!: ElementRef;
+    @ViewChild('slider', { static: true }) slider!: ElementRef;
 
-  minDate = new Date(2014, 5, 1);
-  maxDate = new Date(2030, 2, 28);
+    minDate = new Date(0, 0, 0);
+    maxDate = new Date(0, 0, 0);
 
-  startDate = new Date(2014, 5, 1);
-  endDate = new Date(2030, 2, 28);
+    startDate = new Date();
+    endDate = new Date();
 
-  startPos = this.dateToPosition(this.startDate);
-  endPos = this.dateToPosition(this.endDate);
+    startPos = 0;
+    endPos = 1;
 
-  dragging: 'start' | 'end' | null = null;
+    dragging: 'start' | 'end' | null = null;
+
+    async ngOnInit() {
+        const [
+            firstYear, firstMonth, firstDay,
+            lastYear, lastMonth, lastDay
+        ] = await Promise.all([
+            fetch("http://localhost:4200/cordis/firstDate/year"),
+            fetch("http://localhost:4200/cordis/firstDate/month"),
+            fetch("http://localhost:4200/cordis/firstDate/day"),
+            fetch("http://localhost:4200/cordis/lastDate/year"),
+            fetch("http://localhost:4200/cordis/lastDate/month"),
+            fetch("http://localhost:4200/cordis/lastDate/day")
+        ]);
+
+        const firstYearRes = Number(await firstYear.text());
+        const firstMonthRes = Number(await firstMonth.text());
+        const firstDayRes = Number(await firstDay.text());
+
+        const lastYearRes = Number(await lastYear.text());
+        const lastMonthRes = Number(await lastMonth.text());
+        const lastDayRes = Number(await lastDay.text());
+
+        this.minDate = new Date(firstYearRes, firstMonthRes - 1, firstDayRes);
+        this.maxDate = new Date(lastYearRes, lastMonthRes - 1, lastDayRes);
+
+        this.startDate = this.minDate;
+        this.endDate = this.maxDate;
+
+        this.startPos = 0;
+        this.endPos = 1;
+    }
 
   dateToPosition(date: Date): number {
     const total = this.maxDate.getTime() - this.minDate.getTime();

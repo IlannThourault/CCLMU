@@ -111,6 +111,13 @@ def getFirtDate():
     
     return firstDate
 
+def getFirstDateYear():
+    return getFirtDate().year
+def getFirstDateMonth():
+    return getFirtDate().month
+def getFirstDateDay():
+    return getFirtDate().day
+
 
 def getLastDate():
     lastDate = datetime.date(1, 1, 1)
@@ -129,11 +136,27 @@ def getLastDate():
     
     return lastDate
 
+def getLastDateYear():
+    return getLastDate().year
+def getLastDateMonth():
+    return getLastDate().month
+def getLastDateDay():
+    return getLastDate().day
+
+
+
 
 listeContributeurs = getListContributors("UNIVERSITE DU MANS")
 
 print(getFirtDate())
+print(getFirstDateYear())
+print(getFirstDateMonth())
+print(getFirstDateDay())
 print(getLastDate())
+print(getLastDateYear())
+print(getLastDateMonth())
+print(getLastDateDay())
 
-for orga in listeContributeurs:
-    print(getLocFromName(orga))
+
+#for orga in listeContributeurs:
+ #   print(getLocFromName(orga))
