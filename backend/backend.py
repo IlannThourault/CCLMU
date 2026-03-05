@@ -3,6 +3,7 @@ from fastapi.middleware.cors import CORSMiddleware
 
 import scanR
 import cordis
+import hal
 
 app = FastAPI()
 
@@ -52,7 +53,16 @@ def getLastDateDay():
     return cordis.getLastDateDay()
 
 
-# requette qui renvoie tous les points gps des organisations ayant colloborées dans un projet inclus dans le dates passées en param
+# requette qui renvoie tous les points gps des organisations ayant colloborées dans un projet inclus dans les dates passées en param (cordis)
 @app.get("/cordis/getAllLocalizationsFromDates")
 def getAllLocalizationsFromDates(deb: str, fin: str):
     return cordis.getAllLocalizationsFromDates(deb, fin)
+
+
+
+#http://localhost:4200/hal/getCoordinatesFromDates?anneeMin=2000&anneeMax=2010&moisMin=1&moisMax=12
+
+# requette qui renvoie tous les points gps des organisations ayant colloborées dans un projet inclus dans les dates passées en param (hal)
+@app.get("/hal/getCoordinatesFromDates")
+def getCoordinatesFromDates(anneeMin: int, anneeMax: int, moisMin: int, moisMax: int):
+    return hal.getCoordinatesFromDates(anneeMin, anneeMax, moisMin, moisMax)
