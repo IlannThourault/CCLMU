@@ -26,13 +26,13 @@ def getFirtDate():
     return cordis.getFirtDate()
 
 @app.get("/cordis/firstDate/year")
-def getFirtDate():
+def getFirstDateYear():
     return cordis.getFirstDateYear()
 @app.get("/cordis/firstDate/month")
-def getFirtDate():
+def getFirstDateMonth():
     return cordis.getFirstDateMonth()
 @app.get("/cordis/firstDate/day")
-def getFirtDate():
+def getFirstDateDay():
     return cordis.getFirstDateDay()
 
 
@@ -42,11 +42,17 @@ def getLastDate():
     return cordis.getLastDate()
 
 @app.get("/cordis/lastDate/year")
-def getFirtDate():
+def getLastDateYear():
     return cordis.getLastDateYear()
 @app.get("/cordis/lastDate/month")
-def getFirtDate():
+def getLastDateMonth():
     return cordis.getLastDateMonth()
 @app.get("/cordis/lastDate/day")
-def getFirtDate():
+def getLastDateDay():
     return cordis.getLastDateDay()
+
+
+# requette qui renvoie tous les points gps des organisations ayant colloborées dans un projet inclus dans le dates passées en param
+@app.get("/cordis/getAllLocalizationsFromDates")
+def getAllLocalizationsFromDates(deb: str, fin: str):
+    return cordis.getAllLocalizationsFromDates(deb, fin)
