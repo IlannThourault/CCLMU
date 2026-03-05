@@ -6,6 +6,9 @@ import {
 } from '@angular/core';
 
 import { CommonModule, DatePipe } from '@angular/common';
+import { map } from 'leaflet';
+import { MapComponent } from '../mapComponent/mapComponent';
+import { MapService } from '../../map-service';
 
 @Component({
   selector: 'app-slider',
@@ -18,6 +21,8 @@ import { CommonModule, DatePipe } from '@angular/common';
   styleUrls: ['./slider.scss']
 })
 export class SliderComponent {
+
+   constructor(private mapService : MapService){}
 
     @ViewChild('slider', { static: true }) slider!: ElementRef;
 
@@ -116,5 +121,6 @@ export class SliderComponent {
   @HostListener('document:mouseup')
   stopDrag() {
     this.dragging = null;
+    this.mapService.triggerAction(new Date("2023-03-01"), new Date("2024-03-05"));
   }
 }

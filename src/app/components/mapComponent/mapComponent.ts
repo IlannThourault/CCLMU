@@ -1,5 +1,7 @@
 import { Component, AfterViewInit, Inject, PLATFORM_ID } from '@angular/core';
 import { isPlatformBrowser } from '@angular/common';
+import { Marker } from 'leaflet';
+import { MapService } from '../../map-service';
 
 interface MarkerItem {
   lat: number;
@@ -22,7 +24,14 @@ export class MapComponent implements AfterViewInit {
 
   private map: any;
 
-  constructor(@Inject(PLATFORM_ID) private platformId: Object) {}
+  constructor(@Inject(PLATFORM_ID) private platformId: Object,
+    private mapService : MapService){}
+
+  async ngOnInit(){
+    this.mapService.action$.subscribe((data) => {
+      this.addMarker(data.firstDate, data.lastDate);
+    })
+  }
 
   async ngAfterViewInit() {
     if (isPlatformBrowser(this.platformId)) {
@@ -34,7 +43,7 @@ export class MapComponent implements AfterViewInit {
   }
 
   private initMap(L: any) {
-    this.map = L.map('map')//.setView([48.8566, 2.3522], 13);
+    this.map = L.map('map')
 
     fetch('https://nominatim.openstreetmap.org/search?format=json&q=Le+Mans,France')
     .then(res => res.json())
@@ -50,19 +59,6 @@ export class MapComponent implements AfterViewInit {
     }).addTo(this.map);
 
     const markersGroup = L.markerClusterGroup();
-
-
-    /*
-    const icon = L.divIcon({
-      className: 'custom-marker',
-      html: '📍',
-      iconSize: [24, 24],
-      iconAnchor: [12, 24],
-    });*/
-    /*
-    L.marker([48.8566, 2.3522], { icon }).addTo(this.map);
-    const marker = L.marker([48.0061, 0.1996]).addTo(this.map);
-    marker.bindPopup('Voici Le Mans ! 🏎️');*/
 
     this.markers.forEach((item) => {
       // Contenu du popup avec boutons
@@ -91,5 +87,29 @@ export class MapComponent implements AfterViewInit {
         });
       }
     });
+  }
+
+  private async fetchCoordsFromDates(firstDate: Date, lastDate: Date): Promise<number[][]> {
+    // URL de ton API
+    const url = `http://localhost:4200/cordis/${firstDate.toISOString()}/${lastDate.toISOString()}`;
+
+    // Fetch
+    const response = await fetch(url);
+
+    // Récupérer le JSON
+    const L: string[] = await response.json();
+
+    // Transformer en nombre
+    const coords: number[][] = L.map(s => {
+      const parts = s.split(",");          // supposer format "lat,lng"
+      return [parseFloat(parts[0]), parseFloat(parts[1])];
+    });
+
+    return coords;
+  }
+
+  public async addMarker(firstDate : Date, lastDate : Date){
+    const coords = await this.fetchCoordsFromDates(firstDate, lastDate);
+    console.log(coords);
   }
 }
