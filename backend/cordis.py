@@ -38,6 +38,45 @@ def getAllLocalizations():
     unique_loc = list(set(loc))
     return unique_loc
 
+def getAllLocalizationsFrom1Project(project):
+    loc = []
+
+    for orga in project["project"]["relations"]["associations"]["organization"]:
+        if isinstance(orga, dict):
+            geo = orga.get("address").get("geolocation")
+            if geo:
+                loc.append(geo)
+    
+    unique_loc = list(set(loc))
+    return unique_loc
+
+def createDateFromStr(dateStr):
+    year = int(dateStr[0:4]) 
+    month = int(dateStr[5:7])
+    day = int(dateStr[8:10])
+    return datetime.date(year, month, day)
+
+def getAllLocalizationsFromDates(dateDebStr, dateFinStr):
+    loc = []
+
+    dateDeb = createDateFromStr(dateDebStr)
+    dateFin = createDateFromStr(dateFinStr)
+
+    for p in data.values():
+
+        project = p["project"]
+
+        dateDebTemp = createDateFromStr(project["startDate"])
+        dateFinTemp = createDateFromStr(project["endDate"])
+
+        if (dateDebTemp > dateDeb and dateDebTemp < dateFin) or \
+           (dateFinTemp > dateDeb and dateFinTemp < dateFin):
+
+            loc.extend(getAllLocalizationsFrom1Project(p))
+
+    return list(set(loc))
+            
+
 
 ##### Liste des orgas du Mans
 
@@ -147,7 +186,7 @@ def getLastDateDay():
 
 
 listeContributeurs = getListContributors("UNIVERSITE DU MANS")
-
+'''
 print(getFirtDate())
 print(getFirstDateYear())
 print(getFirstDateMonth())
@@ -156,7 +195,10 @@ print(getLastDate())
 print(getLastDateYear())
 print(getLastDateMonth())
 print(getLastDateDay())
+'''
 
+for i in getAllLocalizationsFromDates("2016-09-01", "2019-09-01"):
+    print(i)
 
 #for orga in listeContributeurs:
  #   print(getLocFromName(orga))
