@@ -134,7 +134,7 @@ print("Terminé :", len(all_results))
 with open("scanr_publications_le_mans.json", "w") as f:
     json.dump(all_results, f)
 """
-
+"""
 import requests
 import json
 from dotenv import load_dotenv
@@ -235,7 +235,7 @@ print("Terminé :", len(all_results))
 with open("publications_le_mans_light.json", "w") as f:
     json.dump(all_results, f, indent=2)
 
-
+"""
 
 
 def get_markers():

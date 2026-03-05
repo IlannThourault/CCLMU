@@ -121,6 +121,6 @@ export class SliderComponent {
   @HostListener('document:mouseup')
   stopDrag() {
     this.dragging = null;
-    this.mapService.triggerAction(new Date("2023-03-01"), new Date("2024-03-05"));
+    this.mapService.triggerAction(new Date("2016-09-01"), new Date("2019-09-05"));
   }
 }

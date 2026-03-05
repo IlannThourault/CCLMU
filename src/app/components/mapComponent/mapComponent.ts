@@ -3,6 +3,13 @@ import { isPlatformBrowser } from '@angular/common';
 import { Marker } from 'leaflet';
 import { MapService } from '../../map-service';
 
+function formatDate(date: Date): string {
+  const y = date.getFullYear();
+  const m = (date.getMonth() + 1).toString().padStart(2, '0'); // Mois de 0 à 11
+  const d = date.getDate().toString().padStart(2, '0');
+  return `${y}-${m}-${d}`;
+}
+
 interface MarkerItem {
   lat: number;
   lng: number;
@@ -89,18 +96,20 @@ export class MapComponent implements AfterViewInit {
     });
   }
 
+
+
   private async fetchCoordsFromDates(firstDate: Date, lastDate: Date): Promise<number[][]> {
     // URL de ton API
-    const url = `http://localhost:4200/cordis/${firstDate.toISOString()}/${lastDate.toISOString()}`;
+    const url = `http://localhost:4200/cordis/getAllLocalizationsFromDates?deb=${formatDate(firstDate)}&fin=${formatDate(lastDate)}`;
 
     // Fetch
     const response = await fetch(url);
 
     // Récupérer le JSON
-    const L: string[] = await response.json();
+    const liste: string[] = await response.json();
 
     // Transformer en nombre
-    const coords: number[][] = L.map(s => {
+    const coords: number[][] = liste.map(s => {
       const parts = s.split(",");          // supposer format "lat,lng"
       return [parseFloat(parts[0]), parseFloat(parts[1])];
     });
