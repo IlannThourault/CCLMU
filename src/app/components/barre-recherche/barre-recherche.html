@@ -1,0 +1,21 @@
+<div class="search-bar-container">
+  <form class="search-bar" (submit)="search1(); $event.preventDefault()">
+    <input 
+      type="text" 
+      placeholder="Lieu" 
+      [(ngModel)]="query1" 
+      name="query1"
+    />
+    <button type="submit">🔍</button>
+  </form>
+
+  <form class="search-bar" (submit)="search2(); $event.preventDefault()">
+    <input 
+      type="text" 
+      placeholder="Formation" 
+      [(ngModel)]="query2" 
+      name="query2"
+    />
+    <button type="submit">🔍</button>
+  </form>
+</div>

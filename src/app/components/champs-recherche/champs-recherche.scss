@@ -1,0 +1,47 @@
+.champs-recherche-container {
+    height: 200px; 
+    width: 100%;           
+    max-width: 1500px;      
+    
+    overflow-y: auto;      
+    overflow-x: hidden;   
+    
+    padding: 10px;
+    border: 1px solid #eee;
+    margin-bottom: 20px;
+    box-sizing: border-box; 
+}
+
+.liste-champs {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 15px;
+}
+
+
+.champ-content-horizontal {
+    display: flex;         
+    align-items: center;   
+    gap: 8px;             
+}
+
+.champ-valeur-statique {
+    padding: 8px 12px;
+    border: 2px solid #007bff; 
+    border-radius: 4px;
+    color: #333;
+    white-space: nowrap;   
+}
+
+.btn-supprimer {
+    background: none;
+    border: none;
+    color: #ff4d4d;
+    cursor: pointer;
+    font-size: 1.2rem;
+    line-height: 1;
+    padding: 0;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+}
