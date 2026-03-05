@@ -56,7 +56,7 @@ def get_coordinates(adresse):
 def get_structures(query="le mans", rows=50):
     params = {
         "q": query, 
-        "fl": "structId_i,label_s,structAddress_s,structName_s", 
+        "fl": "structId_i,label_s,structAddress_s,structName_s,keyword_s", 
         "rows": rows, 
         "wt": "json"
     }
@@ -64,17 +64,21 @@ def get_structures(query="le mans", rows=50):
     return response.json().get("response", {}).get("docs", [])
 
 def display_structures(documents):
-    print("Analyse des collaborations et géocodage...\n")
     processed_partners = set()
 
     for doc in documents:
         names = doc.get("structName_s", [])
         addresses = doc.get("structAddress_s", [])
+        keywords = doc.get("keyword_s", [])
 
         # On vérifie si ce document appartient bien à une structure du Mans
         has_mans = any("mans" in str(addr).lower() for addr in addresses)
 
         if has_mans:
+            if keywords:
+                print(f"Mots-clés du projet : {', '.join(keywords)}")
+            else:
+                print("Mots-clés du projet : Aucun")
             for i in range(len(names)):
                 name_partenaire = names[i]
                 addr_partenaire = addresses[i] if i < len(addresses) else ""
@@ -88,9 +92,9 @@ def display_structures(documents):
                         
                         lat, lon = get_coordinates(addr_partenaire)
                         if lat:
-                            print(f"   📍 GPS : {lat}, {lon}")
+                            print(f"   GPS : {lat}, {lon}")
                         else:
-                            print(f"   📍 GPS : Non trouvé (Adresse trop complexe)")
+                            print(f"   GPS : Non trouvé (Adresse trop complexe)")
                         
                         processed_partners.add(p_key)
                         print("-" * 30)
