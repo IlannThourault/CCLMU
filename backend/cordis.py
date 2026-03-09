@@ -197,8 +197,8 @@ print(getLastDateMonth())
 print(getLastDateDay())
 '''
 
-for i in getAllLocalizationsFromDates("2016-09-01", "2019-09-01"):
-    print(i)
+#for i in getAllLocalizationsFromDates("2016-09-01", "2019-09-01"):
+    #print(i)
 
 #for orga in listeContributeurs:
  #   print(getLocFromName(orga))

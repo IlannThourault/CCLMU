@@ -118,9 +118,19 @@ export class SliderComponent {
   }
 }
 
-  @HostListener('document:mouseup')
-  stopDrag() {
-    this.dragging = null;
-    this.mapService.triggerAction(new Date("2016-09-01"), new Date("2019-09-05"));
+  timeoutId: any;
+
+@HostListener('document:mouseup')
+stopDrag() {
+  this.dragging = null;
+
+  if (this.timeoutId) {
+    clearTimeout(this.timeoutId);
   }
+
+  this.timeoutId = setTimeout(() => {
+    this.mapService.triggerAction(this.startDate, this.endDate);
+    this.timeoutId = null;
+  }, 1000);
+}
 }
