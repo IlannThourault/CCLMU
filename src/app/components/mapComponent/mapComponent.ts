@@ -30,6 +30,8 @@ export class MapComponent implements AfterViewInit {
   ];
 
   private map: any;
+  private L :any;
+  private markersGroup: any;
 
   constructor(@Inject(PLATFORM_ID) private platformId: Object,
     private mapService : MapService){}
@@ -41,11 +43,12 @@ export class MapComponent implements AfterViewInit {
   }
 
   async ngAfterViewInit() {
+    console.log("ejdfdo");
     if (isPlatformBrowser(this.platformId)) {
-      const L = await import('leaflet');
-      (window as any).L = L;
+      this.L = await import('leaflet');
+      (window as any).L = this.L;
       await import('leaflet.markercluster'); // <-- ici seulement, dans le browser
-      this.initMap(L);
+      this.initMap(this.L);
     }
   }
 
@@ -65,7 +68,7 @@ export class MapComponent implements AfterViewInit {
       attribution: '© OpenStreetMap'
     }).addTo(this.map);
 
-    const markersGroup = L.markerClusterGroup();
+    this.markersGroup = L.markerClusterGroup();
 
     this.markers.forEach((item) => {
       // Contenu du popup avec boutons
@@ -80,10 +83,10 @@ export class MapComponent implements AfterViewInit {
       const marker = L.marker([item.lat, item.lng])
         .bindPopup(popupContent);
 
-      markersGroup.addLayer(marker);
+      this.markersGroup.addLayer(marker);
     });
 
-    this.map.addLayer(markersGroup);
+    this.map.addLayer(this.markersGroup);
 
     // Gestion des boutons dans le popup
     this.map.on('popupopen', (e: any) => {
@@ -94,9 +97,9 @@ export class MapComponent implements AfterViewInit {
         });
       }
     });
+
+    console.log(this.L, " : ", this.markersGroup);
   }
-
-
 
   private async fetchCoordsFromDates(firstDate: Date, lastDate: Date): Promise<number[][]> {
     // URL de ton API
@@ -118,7 +121,19 @@ export class MapComponent implements AfterViewInit {
   }
 
   public async addMarker(firstDate : Date, lastDate : Date){
-    const coords = await this.fetchCoordsFromDates(firstDate, lastDate);
-    console.log(coords);
+    if (!this.L || !this.markersGroup || !this.map) {
+    console.warn("Map ou markersGroup pas encore initialisés. Attendre ngAfterViewInit");
+    return;
+  }
+
+  const coords = await this.fetchCoordsFromDates(firstDate, lastDate);
+
+  this.markersGroup.clearLayers();
+
+
+  coords.forEach(coord => {
+    const marker = this.L.marker([coord[0], coord[1]]);
+    this.markersGroup.addLayer(marker);
+  });
   }
 }
