@@ -83,6 +83,7 @@ export class SliderComponent {
   startDrag(type: 'start' | 'end', event: MouseEvent) {
     event.stopPropagation();
     this.dragging = type;
+    this.draggedFromHandle = true;
   }
 
   minGapYears = 3;
@@ -120,17 +121,24 @@ export class SliderComponent {
 
   timeoutId: any;
 
-@HostListener('document:mouseup')
-stopDrag() {
-  this.dragging = null;
+    draggedFromHandle: boolean = false;
 
-  if (this.timeoutId) {
-    clearTimeout(this.timeoutId);
-  }
+    @HostListener('document:mouseup')
+    stopDrag() {
+        if (this.draggedFromHandle) {
+            // Action seulement si le drag a commencé sur un bouton
+            if (this.timeoutId) {
+                clearTimeout(this.timeoutId);
+            }
 
-  this.timeoutId = setTimeout(() => {
-    this.mapService.triggerAction(this.startDate, this.endDate);
-    this.timeoutId = null;
-  }, 1000);
-}
+            this.timeoutId = setTimeout(() => {
+                this.mapService.triggerAction(this.startDate, this.endDate);
+                this.timeoutId = null;
+            }, 1000);
+        }
+
+        // Réinitialisation des flags à chaque mouseup
+        this.dragging = null;
+        this.draggedFromHandle = false;
+    }
 }
