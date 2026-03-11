@@ -8,8 +8,15 @@
 <!-- * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * -->
 
 <main class="main">
-  <app-mapComponent></app-mapComponent>
-  <app-slider></app-slider>
+  <div class="search-container">
+    <app-barre-recherche></app-barre-recherche>
+    <app-champs-recherche></app-champs-recherche>
+  </div>
+
+  <div class="map-wrapper">
+    <app-mapComponent></app-mapComponent>
+    <app-slider></app-slider>
+  </div>
 </main>
 
 <router-outlet />

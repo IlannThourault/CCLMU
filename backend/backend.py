@@ -1,4 +1,4 @@
-from fastapi import FastAPI
+from fastapi import FastAPI, Response
 from fastapi.middleware.cors import CORSMiddleware
 
 import scanR
@@ -73,3 +73,16 @@ def getAllProject(nomOrga : str):
 @app.get("/hal/getCoordinatesFromDates")
 def getCoordinatesFromDates(anneeMin: int, anneeMax: int, moisMin: int, moisMax: int):
     return hal.getCoordinatesFromDates(anneeMin, anneeMax, moisMin, moisMax)
+
+
+#http://localhost:4200/hal/getDataFromFilters?anneeMin=2000&anneeMax=2010&moisMin=1&moisMax=12&keywords=Le Mans
+@app.get("/hal/getDataFromFilters")
+def get_filtered_results(anneeMin: int, anneeMax: int, moisMin: int, moisMax: int, keywords: str = ""):
+    if moisMin == 1:
+        moisMin = 0  
+    list_kw = [k.strip().lower() for k in keywords.split(",")] if keywords else []
+    return hal.getDataFromFilters(anneeMin, anneeMax, moisMin, moisMax, list_kw)
+
+@app.get("/favicon.ico", include_in_schema=False)
+async def favicon():
+    return Response(content="", media_type="image/x-icon")

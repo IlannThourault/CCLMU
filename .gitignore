@@ -45,3 +45,11 @@ Thumbs.db
 
 # Environment files
 .private_env
+
+
+# Python
+**/__pycache__/
+*.pyc
+
+# Virtual environments
+backend/backend_venv/

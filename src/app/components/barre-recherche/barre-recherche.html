@@ -1,0 +1,20 @@
+<div class="search-bar-container">
+  <div class="search-bar">
+    <div class="autocomplete-wrapper">
+      <input 
+        type="text" 
+        [disabled]="rechercheService.champs().length >= 2"
+        [placeholder]="rechercheService.champs().length >= 2 ? 'Limite de filtres atteinte' : 'Recherche mot-clé...'" 
+        [(ngModel)]="recherche"
+        (input)="filtrerSuggestions($event)" 
+      />
+      
+      <ul class="suggestions-list" *ngIf="suggestionsFiltrees.length > 0 && rechercheService.champs().length < 2">
+        <li *ngFor="let suggestion of suggestionsFiltrees" 
+            (click)="selectionnerSuggestion(suggestion)">
+          {{ suggestion }}
+        </li>
+      </ul>
+    </div>
+  </div>  
+</div>

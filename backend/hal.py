@@ -1,89 +1,90 @@
-
-import json
-
-
-
-"""
 import re
-import requests
-from concurrent.futures import ThreadPoolExecutor
+import json
+from collections import Counter
 
-# --- CONFIGURATION ---
-FILE_PATH = "ressources/halLeMans.json"
-MAX_WORKERS = 10  # Nombre de requêtes simultanées (ne pas trop monter pour ne pas être banni)
+# Chargement des données
+# Assurez-vous que les chemins correspondent à votre structure de projet
+with open("../public/coorHal.json", "r") as f:
+    data = json.load(f)
 
-# Cache global pour éviter de chercher deux fois la même adresse
-geo_cache = {}
-
-def clean_address(adresse):
-    if not adresse: return ""
-    adresse = re.sub(r'(?i)cedex.*', '', adresse)
-    adresse = re.sub(r'(?i)(BP|CS)\s*\d+', '', adresse)
-    return " ".join(adresse.split())
-
-def get_coordinates(adresse):
-    #Fonction de géocodage unitaire avec cache intégré
-    if not adresse or adresse == "Adresse inconnue": return None
-    
-    adresse_propre = clean_address(adresse)
-    if adresse_propre in geo_cache:
-        return geo_cache[adresse_propre]
-
-    url_fr = "https://api-adresse.data.gouv.fr/search/"
-    try:
-        resp = requests.get(url_fr, params={"q": adresse_propre, "limit": 1}, timeout=3)
-        if resp.status_code == 200:
-            data = resp.json()
-            if data['features']:
-                coords = data['features'][0]['geometry']['coordinates']
-                res = (coords[1], coords[0])
-                geo_cache[adresse_propre] = res
-                return res
-    except: pass
-    
-    geo_cache[adresse_propre] = None
-    return None
-
-def load_data(filename):
-    try:
-        with open(filename, "r", encoding="utf-8") as f:
-            return json.load(f)
-    except Exception as e:
-        print(f"Erreur chargement : {e}")
-        return []
-
-def process_doc(doc, anneeMin, anneeMax, moisMin, moisMax):
-    #Filtre un document et extrait les adresses à géocoder
-    annee = doc.get("producedDateY_i", 0)
-    mois = doc.get("producedDateM_i", 0)
-
-    # Filtre temporel
-    if not (anneeMin <= annee <= anneeMax): return []
-    if annee == anneeMin and moisMin > 0 and mois < moisMin: return []
-    if annee == anneeMax and moisMax > 0 and mois > moisMax: return []
-
-    addresses = doc.get("structAddress_s", [])
-    names = doc.get("structName_s", [])
-    
-    # On vérifie si le projet est lié au Mans
-    if any("mans" in str(addr).lower() for addr in addresses):
-        # On retourne la liste des adresses des partenaires hors Le Mans
-        return [addr for addr in addresses if "mans" not in str(addr).lower()]
-    return []
-
-"""
-
-with open("ressources/coorHal.json", "r") as f:
-        data = json.load(f)
+with open("../../halLeMans.json", "r") as hal_file:
+    dataHal = json.load(hal_file)
 
 def getCoordinatesFromDates(anneeMin, anneeMax, moisMin, moisMax):
-    
-    
+    """Renvoie la liste unique des points GPS pour une période donnée."""
     results = []
     for d in data:
-        if anneeMin <= d['y'] <= anneeMax:
-            if moisMin <= d['m'] <= moisMax:
-                for coord in d['gps']:
+        if anneeMin <= d.get('y', 0) <= anneeMax:
+            if moisMin <= d.get('m', 0) <= moisMax:
+                for coord in d.get('gps', []):
                     results.append(tuple(coord))
-    
     return list(set(results))
+
+def getAllKeyWords():
+    """Génère le fichier de suggestions pour la barre de recherche."""
+    tous_les_mots_trouves = []
+    pattern = r'^[a-zA-Z0-9àâäéèêëîïôöùûüçÀÂÄÉÈÊËÎÏÔÖÙÛÜÇ\s\-,.\'\(\)]+$'
+
+    for d in dataHal:
+        mots = d.get("keyword_s", [])
+        if isinstance(mots, str):
+            mots = [mots]
+        
+        if isinstance(mots, list):
+            for m in mots:
+                if re.match(pattern, m):
+                    tous_les_mots_trouves.append(m.strip())
+
+    compteur = Counter(tous_les_mots_trouves)
+    mots_tries_par_frequence = [mot for mot, count in compteur.most_common()]
+
+    chemin = "ressources/keywordsHal.ts"
+    with open(chemin, "w", encoding="utf-8") as f:
+        f.write("export const HalKeywords: string[] = [\n")
+        for kw in mots_tries_par_frequence:
+            clean_kw = kw.replace("'", "\\'")
+            f.write(f"  '{clean_kw}',\n")
+        f.write("];\n")
+
+
+
+# Dans hal.py, modifiez la fonction getDataFromFilters
+def getDataFromFilters(anneeMin, anneeMax, moisMin, moisMax, selectedKeywords=None):
+    results = []
+    vus = set()
+    search_terms = [s.strip().lower() for s in selectedKeywords] if selectedKeywords else []
+
+    for d in data:
+        # Récupération de l'année (qui est maintenant une liste grâce à coorHal.py)
+        annees_projet = d.get('y', [])
+        if isinstance(annees_projet, int): annees_projet = [annees_projet]
+        
+        # 1. Filtre sur les dates : on vérifie si une des années est dans la plage
+        date_match = any(anneeMin <= a <= anneeMax for a in annees_projet)
+        
+        if date_match:
+            # 2. Logique de filtrage par mots-clés
+            match = True
+            if search_terms:
+                entree_kws = d.get('kw', [])
+                if entree_kws is None: entree_kws = []
+                entree_kws_lower = [str(k).lower() for k in entree_kws]
+                
+                match = any(
+                    any(term in project_kw for project_kw in entree_kws_lower)
+                    for term in search_terms
+                )
+            
+            # 3. Construction du format de sortie
+            if match:
+                nom_org = d.get('n', "Inconnu")
+                coords = d.get('gps', [])
+                
+                # 'gps' est une liste de listes [[lat, lon]]
+                for c in coords:
+                    nom_lat_long_str = f"{nom_org},{c[0]},{c[1]}"
+                    if nom_lat_long_str not in vus:
+                        results.append([nom_lat_long_str])
+                        vus.add(nom_lat_long_str)
+    
+    return results
