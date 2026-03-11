@@ -76,7 +76,8 @@ def getDataFromFilters(anneeMin, anneeMax, moisMin, moisMax, selectedKeywords=No
             # 3. Construction du format de sortie
             if match:
                 nom_org = d.get('n', "Inconnu")
-                nom_org.replace(",", "")  # Éviter les conflits avec la virgule de séparation
+                
+                nom_org = nom_org.replace(",", "")  # Éviter les conflits avec la virgule de séparation
                 coords = d.get('gps', [])
                 
                 # 'gps' est une liste de listes [[lat, lon]]
