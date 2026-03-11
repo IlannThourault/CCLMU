@@ -82,7 +82,8 @@ def getDataFromFilters(anneeMin, anneeMax, moisMin, moisMax, selectedKeywords=No
                 for c in coords:
                     nom_lat_long_str = f"{nom_org},{c[0]},{c[1]}"
                     if nom_lat_long_str not in vus:
-                        results.append([nom_lat_long_str])
+                        # ON AJOUTE DIRECTEMENT LA CHAÎNE (pas entre crochets)
+                        results.append(nom_lat_long_str) 
                         vus.add(nom_lat_long_str)
     
     return results
