@@ -2,6 +2,7 @@ import { Component, AfterViewInit, Inject, PLATFORM_ID } from '@angular/core';
 import { isPlatformBrowser } from '@angular/common';
 import { Marker } from 'leaflet';
 import { MapService } from '../../map-service';
+import { last } from 'rxjs';
 
 function formatDate(date: Date): string {
   const y = date.getFullYear();
@@ -81,18 +82,20 @@ export class MapComponent implements AfterViewInit {
   }
 
   private async fetchCoordsFromDates(firstDate: Date, lastDate: Date): Promise<{nom: string, coords: number[]}[]> {
-    // URL de ton API
-    const url = `http://localhost:4200/cordis/getAllLocalizationsFromDates?deb=${formatDate(firstDate)}&fin=${formatDate(lastDate)}`;
+    const urlCORDIS = `http://localhost:4200/cordis/getAllLocalizationsFromDates?deb=${formatDate(firstDate)}&fin=${formatDate(lastDate)}`;
+    const urlHAL = `http://localhost:4200/hal/getDataFromFilters?anneeMin=${firstDate.getFullYear()}&anneeMax=${lastDate.getFullYear()}&moisMin=${firstDate.getMonth()}&moisMax=${lastDate.getMonth()}&keywords=`
 
-    // Fetch
-    const response = await fetch(url);
+    const responseCORDIS = await fetch(urlCORDIS);
+    const responseHAL = await fetch(urlHAL);
 
-    // Récupérer le JSON
-    const liste: string[] = await response.json();
+    const listeCORDIS: string[] = await responseCORDIS.json();
+    const listeHAL: string[] = await responseHAL.json();
 
-    // Transformer en nombre
-    const coords: {nom :string, coords :number[]}[] = liste.map(s => {
-      const parts = s.split(",");          // supposer format "lat,lng"
+    const liste: string[] = listeCORDIS.concat(listeHAL);
+
+    const coords: {nom: string, coords: number[]}[] = liste.map(s => {
+      console.log(s);
+      const parts = s.split(",");
       return {nom: parts[0], coords: [parseFloat(parts[1]), parseFloat(parts[2])]};
     });
 
