@@ -38,6 +38,8 @@ def getFirstDateDay():
 
 
 
+
+############ CORDIS ###########
 @app.get("/cordis/lastDate")
 def getLastDate():
     return cordis.getLastDate()
@@ -57,6 +59,11 @@ def getLastDateDay():
 @app.get("/cordis/getAllLocalizationsFromDates")
 def getAllLocalizationsFromDates(deb: str, fin: str):
     return cordis.getAllLocalizationsFromDates(deb, fin)
+
+
+@app.get("/cordis/listOfProject")
+def getAllProject(nomOrga : str):
+    return cordis.getAllProject(nomOrga)
 
 
 

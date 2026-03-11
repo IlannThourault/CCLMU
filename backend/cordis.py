@@ -1,5 +1,7 @@
 import json
 import datetime
+from collections import Counter
+import pprint
 
 # Chargement du json en global
 with open("ressources/publications.json", "r", encoding="utf-8") as f:
@@ -44,11 +46,24 @@ def getAllLocalizationsFrom1Project(project):
     for orga in project["project"]["relations"]["associations"]["organization"]:
         if isinstance(orga, dict):
             geo = orga.get("address").get("geolocation")
-            if geo:
-                loc.append(geo)
+            name = orga.get("legalName")
+            if geo and name:
+                loc.append((name, geo))
     
     unique_loc = list(set(loc))
     return unique_loc
+
+def getAllOrganizationsFrom1Project(project):
+    names = []
+
+    for orga in project["project"]["relations"]["associations"]["organization"]:
+        if isinstance(orga, dict):
+            name = orga.get("legalName")
+            if name:
+                names.append(name)
+    
+    unique_names = list(set(names))
+    return unique_names
 
 def createDateFromStr(dateStr):
     year = int(dateStr[0:4]) 
@@ -125,7 +140,7 @@ def getLocFromName(nomOrga: str):
     return "ERROR : Le nomOrga n'existe pas"
     
 
-#print(getLocFromName("METACUSTIC"))
+#print(getLocFromName("METACOUSTIC"))
 #print(getLocFromName("Centre Hospitalier Le Mans"))
 #print(getLocFromName("SILENTSYS"))
 #print(getLocFromName("ACO AUTOMOBILE CLUB DE L'OUEST"))
@@ -185,6 +200,57 @@ def getLastDateDay():
 
 
 
+def getAllKeywords():
+    names = []
+
+    for p in data.values():
+        temp = p.get("project", {}).get("keywords")
+        
+        if temp:
+            temp = temp.split(", ")
+            
+            for word in temp:
+                names.append(word)
+    
+
+    #suppression des espace et deb et fin
+    res = []
+    for word in names:
+        newWord = word
+
+        if word[0] == ' ':
+            newWord = newWord[1:]
+        if word[-1] == ' ':
+            newWord = newWord[:-1]
+            
+        res.append(newWord)
+    return set(res) 
+
+
+#print(getAllKeywords())
+
+
+def getAllProject(nomOrga):
+    listeProjects = []
+
+    for p in data.values():
+        for orga in p["project"]["relations"]["associations"]["organization"]:
+            if isinstance(orga, dict):
+                if orga.get("legalName") == nomOrga:
+                    title = p["project"]["title"]
+                    teaser = p["project"]["teaser"]
+                    description = p["project"]["objective"]
+                    cost = p["project"]["totalCost"]
+                    startDate = p["project"]["startDate"]
+                    endDate = p["project"]["endDate"]
+                    
+                    allContributors = getAllOrganizationsFrom1Project(p)
+
+                    listeProjects.append({"title" : title, "teaser" : teaser, "description" : description, "cost" : cost, "startDate" : startDate, "endDate" : endDate, "allContributors" : allContributors})
+
+    return listeProjects
+
+
 listeContributeurs = getListContributors("UNIVERSITE DU MANS")
 '''
 print(getFirtDate())
@@ -196,9 +262,11 @@ print(getLastDateYear())
 print(getLastDateMonth())
 print(getLastDateDay())
 '''
-
-#for i in getAllLocalizationsFromDates("2016-09-01", "2019-09-01"):
-    #print(i)
-
+'''
+for i in getAllLocalizationsFromDates("2016-09-01", "2019-09-01"):
+    print(i)
+'''
 #for orga in listeContributeurs:
  #   print(getLocFromName(orga))
+
+print(getAllProject("METACOUSTIC"))
