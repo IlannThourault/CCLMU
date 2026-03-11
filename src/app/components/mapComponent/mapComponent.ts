@@ -24,11 +24,6 @@ interface MarkerItem {
 })
 export class MapComponent implements AfterViewInit {
 
-  markers: MarkerItem[] = [
-    { lat: 48.0061, lng: 0.1996, title: 'Le Mans', description: 'Ville célèbre pour les 24h !' },
-    { lat: 48.008, lng: 0.202, title: 'Point B', description: 'Autre marker avec info.' },
-  ];
-
   private map: any;
   private L :any;
   private markersGroup: any;
@@ -43,11 +38,11 @@ export class MapComponent implements AfterViewInit {
   }
 
   async ngAfterViewInit() {
-    console.log("ejdfdo");
     if (isPlatformBrowser(this.platformId)) {
       this.L = await import('leaflet');
       (window as any).L = this.L;
-      await import('leaflet.markercluster'); // <-- ici seulement, dans le browser
+
+      await import('leaflet.markercluster');
       this.initMap(this.L);
     }
   }
@@ -69,22 +64,6 @@ export class MapComponent implements AfterViewInit {
     }).addTo(this.map);
 
     this.markersGroup = L.markerClusterGroup();
-
-    this.markers.forEach((item) => {
-      // Contenu du popup avec boutons
-      const popupContent = `
-        <div>
-          <h4>${item.title}</h4>
-          <p>${item.description}</p>
-          <button class="marker-btn" data-lat="${item.lat}" data-lng="${item.lng}">Cliquer ici</button>
-        </div>
-      `;
-
-      const marker = L.marker([item.lat, item.lng])
-        .bindPopup(popupContent);
-
-      this.markersGroup.addLayer(marker);
-    });
 
     this.map.addLayer(this.markersGroup);
 
@@ -132,7 +111,18 @@ export class MapComponent implements AfterViewInit {
 
 
   coords.forEach(coord => {
-    const marker = this.L.marker([coord[0], coord[1]]);
+    const popupContent = `<div><h4>Titre</h4></div>`;
+    const defaultIcon = this.L.icon({
+    iconUrl: 'media/marker-icon.png',
+    iconRetinaUrl: 'media/marker-icon-2x.png',
+    shadowUrl: 'media/marker-shadow.png',
+
+    iconSize: [25, 41],
+    iconAnchor: [12, 41],
+    popupAnchor: [1, -34],
+    shadowSize: [41, 41]
+  });
+    const marker = this.L.marker([coord[0], coord[1]], {icon : defaultIcon}).bindPopup(popupContent);
     this.markersGroup.addLayer(marker);
   });
   }
