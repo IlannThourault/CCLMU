@@ -80,7 +80,7 @@ export class MapComponent implements AfterViewInit {
     console.log(this.L, " : ", this.markersGroup);
   }
 
-  private async fetchCoordsFromDates(firstDate: Date, lastDate: Date): Promise<number[][]> {
+  private async fetchCoordsFromDates(firstDate: Date, lastDate: Date): Promise<{nom: string, coords: number[]}[]> {
     // URL de ton API
     const url = `http://localhost:4200/cordis/getAllLocalizationsFromDates?deb=${formatDate(firstDate)}&fin=${formatDate(lastDate)}`;
 
@@ -91,9 +91,9 @@ export class MapComponent implements AfterViewInit {
     const liste: string[] = await response.json();
 
     // Transformer en nombre
-    const coords: number[][] = liste.map(s => {
+    const coords: {nom :string, coords :number[]}[] = liste.map(s => {
       const parts = s.split(",");          // supposer format "lat,lng"
-      return [parseFloat(parts[0]), parseFloat(parts[1])];
+      return {nom: parts[0], coords: [parseFloat(parts[1]), parseFloat(parts[2])]};
     });
 
     return coords;
@@ -105,13 +105,13 @@ export class MapComponent implements AfterViewInit {
     return;
   }
 
-  const coords = await this.fetchCoordsFromDates(firstDate, lastDate);
+  const datas = await this.fetchCoordsFromDates(firstDate, lastDate);
 
   this.markersGroup.clearLayers();
 
 
-  coords.forEach(coord => {
-    const popupContent = `<div><h4>Titre</h4></div>`;
+  datas.forEach(data => {
+    const popupContent = `<div><h4>{data.nom}</h4></div>`;
     const defaultIcon = this.L.icon({
     iconUrl: 'media/marker-icon.png',
     iconRetinaUrl: 'media/marker-icon-2x.png',
@@ -122,7 +122,7 @@ export class MapComponent implements AfterViewInit {
     popupAnchor: [1, -34],
     shadowSize: [41, 41]
   });
-    const marker = this.L.marker([coord[0], coord[1]], {icon : defaultIcon}).bindPopup(popupContent);
+    const marker = this.L.marker([data.coords[0], data.coords[1]], {icon : defaultIcon}).bindPopup(popupContent);
     this.markersGroup.addLayer(marker);
   });
   }
