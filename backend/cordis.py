@@ -88,8 +88,14 @@ def getAllLocalizationsFromDates(dateDebStr, dateFinStr):
            (dateFinTemp > dateDeb and dateFinTemp < dateFin):
 
             loc.extend(getAllLocalizationsFrom1Project(p))
+    
+    ens = list(set(loc))
+    res = []
 
-    return list(set(loc))
+    for elem in ens:
+        res.append(elem[0].replace(",", " ") + "," + elem[1])
+
+    return res 
             
 
 
@@ -262,10 +268,10 @@ print(getLastDateYear())
 print(getLastDateMonth())
 print(getLastDateDay())
 '''
-'''
+
 for i in getAllLocalizationsFromDates("2016-09-01", "2019-09-01"):
     print(i)
-'''
+
 #for orga in listeContributeurs:
  #   print(getLocFromName(orga))
 
