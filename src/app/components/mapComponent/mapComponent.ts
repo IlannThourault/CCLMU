@@ -94,8 +94,10 @@ export class MapComponent implements AfterViewInit {
     const liste: string[] = listeCORDIS.concat(listeHAL);
 
     const coords: {nom: string, coords: number[]}[] = liste.map(s => {
-      console.log(s);
       const parts = s.split(",");
+      if (Number.isNaN(parseFloat(parts[1]))){
+        console.log(s);
+      }
       return {nom: parts[0], coords: [parseFloat(parts[1]), parseFloat(parts[2])]};
     });
 
