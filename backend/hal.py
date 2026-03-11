@@ -7,8 +7,6 @@ from collections import Counter
 with open("../public/coorHal.json", "r") as f:
     data = json.load(f)
 
-with open("../../halLeMans.json", "r") as hal_file:
-    dataHal = json.load(hal_file)
 
 def getCoordinatesFromDates(anneeMin, anneeMax, moisMin, moisMax):
     """Renvoie la liste unique des points GPS pour une période donnée."""
