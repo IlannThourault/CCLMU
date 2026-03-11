@@ -111,7 +111,11 @@ export class MapComponent implements AfterViewInit {
 
 
   datas.forEach(data => {
-    const popupContent = `<div><h4>{data.nom}</h4></div>`;
+    const popupContent = `
+      <div>
+        <h4>${data.nom}</h4>
+        <div class="seeMore">Voir plus</div>
+      </div>`;
     const defaultIcon = this.L.icon({
     iconUrl: 'media/marker-icon.png',
     iconRetinaUrl: 'media/marker-icon-2x.png',
@@ -122,7 +126,7 @@ export class MapComponent implements AfterViewInit {
     popupAnchor: [1, -34],
     shadowSize: [41, 41]
   });
-    const marker = this.L.marker([data.coords[0], data.coords[1]], {icon : defaultIcon}).bindPopup(popupContent);
+    const marker = this.L.marker([data.coords[0], data.coords[1]], {icon : defaultIcon}).bindPopup(popupContent, { autoClose: false});
     this.markersGroup.addLayer(marker);
   });
   }
