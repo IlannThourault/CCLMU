@@ -4,12 +4,13 @@ import { MapComponent } from './components/mapComponent/mapComponent';
 import { SliderComponent } from './components/slider/slider';
 import { ChampsRecherche } from './components/champs-recherche/champs-recherche';
 import { BarreRecherche } from './components/barre-recherche/barre-recherche';
+import { ProjectListComponent } from './components/project-list/project-list.component';
 
 
 
 @Component({
   selector: 'app-root',
-  imports: [RouterOutlet, MapComponent, SliderComponent, ChampsRecherche, BarreRecherche],
+  imports: [RouterOutlet, MapComponent, SliderComponent, ChampsRecherche, BarreRecherche, ProjectListComponent],
   templateUrl: './app.html',
   styleUrls: ['./app.scss']
 })
