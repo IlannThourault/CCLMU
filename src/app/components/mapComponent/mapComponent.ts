@@ -3,6 +3,7 @@ import { isPlatformBrowser } from '@angular/common';
 import { Marker } from 'leaflet';
 import { MapService } from '../../map-service';
 import { last } from 'rxjs';
+import { ProjectService } from '../../services/project.services';
 
 function formatDate(date: Date): string {
   const y = date.getFullYear();
@@ -30,8 +31,9 @@ export class MapComponent implements AfterViewInit {
   private markersGroup: any;
 
   constructor(@Inject(PLATFORM_ID) private platformId: Object,
-    private mapService : MapService){}
-
+    private mapService : MapService,
+    private projectService: ProjectService
+){}
   async ngOnInit(){
     this.mapService.action$.subscribe((data) => {
       this.addMarker(data.firstDate, data.lastDate);
@@ -70,10 +72,13 @@ export class MapComponent implements AfterViewInit {
 
     // Gestion des boutons dans le popup
     this.map.on('popupopen', (e: any) => {
-      const button = e.popup._contentNode.querySelector('.marker-btn');
+      const button = e.popup._contentNode.querySelector('.seeMore');
       if (button) {
+        const nom = button.id.replace('btn-', '');
+
         button.addEventListener('click', () => {
-          alert(`Bouton cliqué ! Coordonnées: ${button.dataset.lat}, ${button.dataset.lng}`);
+            console.log('Clic sur :', nom);
+            this.projectService.emettreVoirPlus(nom);
         });
       }
     });
@@ -119,7 +124,7 @@ export class MapComponent implements AfterViewInit {
     const popupContent = `
       <div>
         <h4>${data.nom}</h4>
-        <div class="seeMore">Voir plus</div>
+        <button id="btn-${data.nom}" class="seeMore">Voir plus</button>
       </div>`;
     const defaultIcon = this.L.icon({
     iconUrl: 'media/marker-icon.png',

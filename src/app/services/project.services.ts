@@ -1,19 +1,14 @@
 import { Injectable } from '@angular/core';
 import { HttpClient } from '@angular/common/http';
-import { Observable } from 'rxjs';
+import { Observable, Subject } from 'rxjs';
 import { Project } from '../models/project';
 
-@Injectable({
-  providedIn: 'root'
-})
+@Injectable({ providedIn: 'root' })
 export class ProjectService {
+  private voirPlusSource = new Subject<string>();
+  voirPlus$ = this.voirPlusSource.asObservable();
 
-  private apiUrl = 'http://localhost:5000/projects';
-
-  constructor(private http: HttpClient) {}
-
-  getProjects(): Observable<Project[]> {
-    return this.http.get<Project[]>(this.apiUrl);
+  emettreVoirPlus(nom: string) {
+    this.voirPlusSource.next(nom);
   }
-
 }
