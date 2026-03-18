@@ -5,12 +5,12 @@ import { SliderComponent } from './components/slider/slider';
 import { ChampsRecherche } from './components/champs-recherche/champs-recherche';
 import { BarreRecherche } from './components/barre-recherche/barre-recherche';
 import { ProjectListComponent } from './components/project-list/project-list.component';
-
+import {Menu} from "./components/menu/menu";
 
 
 @Component({
   selector: 'app-root',
-  imports: [RouterOutlet, MapComponent, SliderComponent, ChampsRecherche, BarreRecherche, ProjectListComponent],
+  imports: [RouterOutlet, MapComponent, SliderComponent, ChampsRecherche, BarreRecherche, ProjectListComponent, Menu],
   templateUrl: './app.html',
   styleUrls: ['./app.scss']
 })

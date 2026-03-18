@@ -22,6 +22,9 @@
             flex: 1;
             padding: 0.6rem;
             font-size: 1.1rem; /* Un peu plus grand pour le confort */
+            outline: none;
+            border-color: #4F6814;     /* ← Votre vert au focus */
+            border-width: 1px;
         }
     }
 }
@@ -31,19 +34,6 @@
 }
 
 
-input {
-    &:disabled {
-        background-color: #eee;
-        cursor: not-allowed;
-        color: #888;
-        border: 1px solid #ccc;
-
-        &::placeholder {
-            color: #d9534f; /* Un rouge discret pour l'alerte */
-            font-style: italic;
-        }
-    }
-}
 
 .suggestions-list {
     position: absolute;
@@ -67,7 +57,7 @@ input {
         color: #333;
 
         &:hover {
-            background-color: var(--bright-blue);
+            background-color: #4F6814;
             color: white;
         }
     }
