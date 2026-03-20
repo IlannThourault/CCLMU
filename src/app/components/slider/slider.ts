@@ -9,6 +9,7 @@ import { CommonModule, DatePipe } from '@angular/common';
 import { map } from 'leaflet';
 import { MapComponent } from '../mapComponent/mapComponent';
 import { MapService } from '../../map-service';
+import { RechercheService } from '../../services/recherche.service';
 
 @Component({
   selector: 'app-slider',
@@ -22,7 +23,10 @@ import { MapService } from '../../map-service';
 })
 export class SliderComponent {
 
-   constructor(private mapService : MapService){}
+    constructor(
+        private mapService: MapService,
+        private rechercheService: RechercheService
+    ) {}
 
     @ViewChild('slider', { static: true }) slider!: ElementRef;
 
@@ -126,13 +130,15 @@ export class SliderComponent {
     @HostListener('document:mouseup')
     stopDrag() {
         if (this.draggedFromHandle) {
+            const motsCles = this.rechercheService.motsClesTexte();
+
             // Action seulement si le drag a commencé sur un bouton
             if (this.timeoutId) {
                 clearTimeout(this.timeoutId);
             }
 
             this.timeoutId = setTimeout(() => {
-                this.mapService.triggerAction(this.startDate, this.endDate);
+                this.mapService.triggerAction(this.startDate, this.endDate, motsCles);
                 this.timeoutId = null;
             }, 1000);
         }

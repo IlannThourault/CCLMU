@@ -1,4 +1,4 @@
-import { Injectable, signal, inject } from '@angular/core';
+import { Injectable, signal, inject, computed} from '@angular/core';
 import { HttpClient } from '@angular/common/http'; 
 
 export interface ChampRecherche {
@@ -27,6 +27,11 @@ export class RechercheService {
   constructor() {
     this.chargerDonnees();
   }
+
+    // Cette variable renverra toujours "Mot1, Mot2, Mot3" automatiquement
+    public motsClesTexte = computed(() => 
+        this.champs().map(c => c.valeur).join(',')
+    );
 
   private chargerDonnees() {
     this.http.get<PointHal[]>('coorHal.json').subscribe({

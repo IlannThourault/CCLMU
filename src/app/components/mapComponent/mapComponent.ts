@@ -4,6 +4,7 @@ import { Marker } from 'leaflet';
 import { MapService } from '../../map-service';
 import { last } from 'rxjs';
 import { ProjectService } from '../../services/project.services';
+import { HalKeywords } from '../../../../backend/ressources/keywordsHal';
 
 function formatDate(date: Date): string {
   const y = date.getFullYear();
@@ -36,7 +37,7 @@ export class MapComponent implements AfterViewInit {
 ){}
   async ngOnInit(){
     this.mapService.action$.subscribe((data) => {
-      this.addMarker(data.firstDate, data.lastDate);
+      this.addMarker(data.firstDate, data.lastDate, data.keywords);
     })
   }
 
@@ -86,9 +87,12 @@ export class MapComponent implements AfterViewInit {
     console.log(this.L, " : ", this.markersGroup);
   }
 
-  private async fetchCoordsFromDates(firstDate: Date, lastDate: Date): Promise<{nom: string, coords: number[]}[]> {
-    const urlCORDIS = `http://localhost:4200/cordis/getAllLocalizationsFromDates?deb=${formatDate(firstDate)}&fin=${formatDate(lastDate)}`;
-    const urlHAL = `http://localhost:4200/hal/getDataFromFilters?anneeMin=${firstDate.getFullYear()}&anneeMax=${lastDate.getFullYear()}&moisMin=${firstDate.getMonth()}&moisMax=${lastDate.getMonth()}&keywords=`
+  private async fetchCoordsFromDates(firstDate: Date, lastDate: Date, keywords: string): Promise<{nom: string, coords: number[]}[]> {
+    const encodedK = encodeURIComponent(keywords);
+
+    
+    const urlCORDIS = `http://localhost:4200/cordis/getAllLocalizationsFromDates?deb=${formatDate(firstDate)}&fin=${formatDate(lastDate)}&keywords=${encodedK}`;
+    const urlHAL = `http://localhost:4200/hal/getDataFromFilters?anneeMin=${firstDate.getFullYear()}&anneeMax=${lastDate.getFullYear()}&moisMin=${firstDate.getMonth()}&moisMax=${lastDate.getMonth()}&keywords=${encodedK}`
 
     const responseCORDIS = await fetch(urlCORDIS);
     const responseHAL = await fetch(urlHAL);
@@ -109,13 +113,13 @@ export class MapComponent implements AfterViewInit {
     return coords;
   }
 
-  public async addMarker(firstDate : Date, lastDate : Date){
+  public async addMarker(firstDate : Date, lastDate : Date, keywords : string){
     if (!this.L || !this.markersGroup || !this.map) {
     console.warn("Map ou markersGroup pas encore initialisés. Attendre ngAfterViewInit");
     return;
   }
 
-  const datas = await this.fetchCoordsFromDates(firstDate, lastDate);
+  const datas = await this.fetchCoordsFromDates(firstDate, lastDate, keywords);
 
   this.markersGroup.clearLayers();
 
