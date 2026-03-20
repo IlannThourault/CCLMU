@@ -12,7 +12,7 @@
       <ul class="suggestions-list" *ngIf="suggestionsFiltrees.length > 0 && rechercheService.champs().length < 2">
         <li *ngFor="let suggestion of suggestionsFiltrees" 
             (click)="selectionnerSuggestion(suggestion)">
-          {{ suggestion }}
+          {{ suggestion | titlecase}}
         </li>
       </ul>
     </div>

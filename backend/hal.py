@@ -3,13 +3,11 @@ import json
 from collections import Counter
 
 # Chargement des données
-# Assurez-vous que les chemins correspondent à votre structure de projet
 with open("../public/coorHal.json", "r") as f:
     data = json.load(f)
 
 
 def getCoordinatesFromDates(anneeMin, anneeMax, moisMin, moisMax):
-    """Renvoie la liste unique des points GPS pour une période donnée."""
     results = []
     for d in data:
         if anneeMin <= d.get('y', 0) <= anneeMax:
@@ -19,7 +17,6 @@ def getCoordinatesFromDates(anneeMin, anneeMax, moisMin, moisMax):
     return list(set(results))
 
 def getAllKeyWords():
-    """Génère le fichier de suggestions pour la barre de recherche."""
     tous_les_mots_trouves = []
     pattern = r'^[a-zA-Z0-9àâäéèêëîïôöùûüçÀÂÄÉÈÊËÎÏÔÖÙÛÜÇ\s\-,.\'\(\)]+$'
 
@@ -47,45 +44,45 @@ def getAllKeyWords():
 
 
 # Dans hal.py, modifiez la fonction getDataFromFilters
-def getDataFromFilters(anneeMin, anneeMax, moisMin, moisMax, selectedKeywords=None):
+def getDataFromFilters(anneeMin, anneeMax, moisMin, moisMax, keyword1=None, keyword2=None):
     results = []
     vus = set()
-    search_terms = [s.strip().lower() for s in selectedKeywords] if selectedKeywords else []
+    
+    # On récupère uniquement les mots-clés non vides
+    search_terms = [str(k).strip().lower() for k in [keyword1, keyword2] if k and str(k).strip()]
 
     for d in data:
-        # Récupération de l'année (qui est maintenant une liste grâce à coorHal.py)
+        # filtrage des dates
         annees_projet = d.get('y', [])
-        if isinstance(annees_projet, int): annees_projet = [annees_projet]
+        if isinstance(annees_projet, (int, float)): 
+            annees_projet = [annees_projet]
         
-        # 1. Filtre sur les dates : on vérifie si une des années est dans la plage
-        date_match = any(anneeMin <= a <= anneeMax for a in annees_projet)
+        date_match = any(anneeMin <= int(a) <= anneeMax for a in annees_projet if str(a).isdigit())
         
         if date_match:
-            # 2. Logique de filtrage par mots-clés
             match = True
             if search_terms:
-                entree_kws = d.get('kw', [])
-                if entree_kws is None: entree_kws = []
+                entree_kws = d.get('kw') or []
                 entree_kws_lower = [str(k).lower() for k in entree_kws]
                 
-                match = any(
+                #filtrage des mots clés
+                match = all(
                     any(term in project_kw for project_kw in entree_kws_lower)
                     for term in search_terms
                 )
             
-            # 3. Construction du format de sortie
+            #ajout à la liste de retour
             if match:
-                nom_org = d.get('n', "Inconnu")
-                
-                nom_org = nom_org.replace(",", "")  # Éviter les conflits avec la virgule de séparation
+                nom_org = str(d.get('n', "Inconnu")).replace(",", " ")
                 coords = d.get('gps', [])
                 
-                # 'gps' est une liste de listes [[lat, lon]]
                 for c in coords:
-                    nom_lat_long_str = f"{nom_org},{c[0]},{c[1]}"
-                    if nom_lat_long_str not in vus:
-                        # ON AJOUTE DIRECTEMENT LA CHAÎNE (pas entre crochets)
-                        results.append(nom_lat_long_str) 
-                        vus.add(nom_lat_long_str)
+                    if len(c) >= 2:
+                        nom_lat_long_str = f"{nom_org},{c[0]},{c[1]}"
+                        if nom_lat_long_str not in vus:
+                            results.append(nom_lat_long_str) 
+                            vus.add(nom_lat_long_str)
     
     return results
+
+#print(getDataFromFilters(1900, 2030, 0, 12, "le mans"))

@@ -1,5 +1,5 @@
 <div class="champs-recherche-container">
-  <h3>Filtres ajoutés ({{ nombreChamps() }}/2)</h3>
+  <h3>Filtres ajoutés ({{ champs().length }}/2)</h3>
   
   <div *ngIf="champs().length === 0" class="message-vide">
     <p>Aucun filtre ajouté.</p>
@@ -8,10 +8,10 @@
   <div class="liste-champs" *ngIf="champs().length > 0">
     <div *ngFor="let champ of champs()" class="champ-item-inline">
       <span class="champ-valeur">
-        {{ champ.valeur }}
+        {{ champ.valeur | titlecase }}
       </span>
       <button 
-        (click)="supprimerChamp(champ.id)"
+        (click)="supprimerChamp(champ.valeur)"
         class="btn-supprimer-inline"
         title="Supprimer"
       >
