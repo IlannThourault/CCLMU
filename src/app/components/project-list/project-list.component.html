@@ -1,9 +1,9 @@
 <div *ngFor="let project of projects" class="project-card">
   <h2>{{ project.title }}</h2>
   <p>{{ project.teaser }}</p>
-  <p><b>Start:</b> {{ project.startDate }} | <b>End:</b> {{ project.endDate }}</p>
+  <p><b>Début:</b> {{ project.startDate }} | <b>Fin:</b> {{ project.endDate }}</p>
   <div>
-    <b>Contributors:</b>
+    <b>Contributeurs:</b>
     <ul>
       <li *ngFor="let c of project.allContributors">{{ c }}</li>
     </ul>

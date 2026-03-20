@@ -71,11 +71,17 @@ def createDateFromStr(dateStr):
     day = int(dateStr[8:10])
     return datetime.date(year, month, day)
 
-def getAllLocalizationsFromDates(dateDebStr, dateFinStr):
+def getAllLocalizationsFromDates(dateDebStr, dateFinStr, keywords):
     loc = []
 
     dateDeb = createDateFromStr(dateDebStr)
     dateFin = createDateFromStr(dateFinStr)
+    
+    keywords = keywords.split(",")
+    keyword1 = keywords[0].lower()
+    keyword2 = keywords[-1].lower()
+
+    print(keyword1 + " " + keyword2)
 
     for p in data.values():
 
@@ -85,9 +91,15 @@ def getAllLocalizationsFromDates(dateDebStr, dateFinStr):
         dateFinTemp = createDateFromStr(project["endDate"])
 
         if (dateDebTemp > dateDeb and dateDebTemp < dateFin) or \
-           (dateFinTemp > dateDeb and dateFinTemp < dateFin):
+           (dateFinTemp > dateDeb and dateFinTemp < dateFin):   
 
-            loc.extend(getAllLocalizationsFrom1Project(p))
+            listeKeywords = project.get("keywords", "").lower().split(",")
+
+            #suppression des espace et deb et fin
+            listeKeywordsClear = [word.strip() for word in listeKeywords if word.strip()]
+
+            if keyword1 in listeKeywordsClear and keyword2 in listeKeywordsClear:
+                loc.extend(getAllLocalizationsFrom1Project(p))
     
     ens = list(set(loc))
     res = []
@@ -95,9 +107,9 @@ def getAllLocalizationsFromDates(dateDebStr, dateFinStr):
     for elem in ens:
         res.append(elem[0].replace(",", " ") + "," + elem[1])
 
-    return res 
+    return res
             
-
+print(len(getAllLocalizationsFromDates("2010-07-16", "2030-07-16", "Food sciences")))
 
 ##### Liste des orgas du Mans
 
@@ -257,6 +269,7 @@ def getAllProject(nomOrga):
     return listeProjects
 
 
+
 listeContributeurs = getListContributors("UNIVERSITE DU MANS")
 '''
 print(getFirtDate())
@@ -269,10 +282,10 @@ print(getLastDateMonth())
 print(getLastDateDay())
 '''
 
-for i in getAllLocalizationsFromDates("2016-09-01", "2019-09-01"):
-    print(i)
+#for i in getAllLocalizationsFromDates("2016-09-01", "2019-09-01"):
+#    print(i)
 
 #for orga in listeContributeurs:
  #   print(getLocFromName(orga))
 
-print(getAllProject("METACOUSTIC"))
+#print(getAllProject("METACOUSTIC"))

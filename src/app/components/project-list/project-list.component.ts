@@ -23,6 +23,7 @@ interface Project {
 export class ProjectListComponent implements OnInit {
 
     projects: Project[] = [];
+    nomProjet: String | undefined;
 
     constructor(
         private http: HttpClient, 
@@ -32,20 +33,20 @@ export class ProjectListComponent implements OnInit {
     ngOnInit() {
         // subscribe au bouton voir plus pour afficher les bons résultats
         this.projectService.voirPlus$.subscribe((nomProjet) => {
-        console.log("Nom reçu depuis la carte :", nomProjet);
-        
-        // Appel a l'api avec le bon projet
-        const url = `http://localhost:4200/cordis/listOfProject?nomOrga=${encodeURIComponent(nomProjet)}`;
-        
-        this.http.get<Project[]>(url).subscribe({
-            next: (data) => {
-            this.projects = data;
-            console.log("Projets récupérés :", this.projects);
-            },
-            error: (err) => {
-            console.error("Erreur lors de la récupération des projets", err);
-            }
-        });
+            this.nomProjet = nomProjet;
+            console.log("Nom reçu depuis la carte :", nomProjet);
+            
+            // Appel a l'api avec le bon projet
+            const url = `http://localhost:4200/cordis/listOfProject?nomOrga=${encodeURIComponent(nomProjet)}`;
+            
+            this.http.get<Project[]>(url).subscribe({
+                next: (data) => {
+                this.projects = data;
+                console.log("Projets récupérés :", this.projects);
+                },
+            });
         });
     }
+
+    
 }

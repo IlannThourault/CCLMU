@@ -57,13 +57,16 @@ def getLastDateDay():
 
 # requette qui renvoie tous les points gps des organisations ayant colloborées dans un projet inclus dans les dates passées en param (cordis)
 @app.get("/cordis/getAllLocalizationsFromDates")
-def getAllLocalizationsFromDates(deb: str, fin: str):
-    return cordis.getAllLocalizationsFromDates(deb, fin)
+def getAllLocalizationsFromDates(deb: str, fin: str, keywords: str):
+    return cordis.getAllLocalizationsFromDates(deb, fin, keywords)
 
 
 @app.get("/cordis/listOfProject")
 def getAllProject(nomOrga : str):
     return cordis.getAllProject(nomOrga)
+
+
+
 
 
 
