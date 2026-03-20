@@ -2,7 +2,7 @@ import requests
 import json
 from dotenv import load_dotenv
 import os
-"""
+
 # Charger le .env (depuis la racine)
 load_dotenv("../.private_env")
 
@@ -23,6 +23,7 @@ headers = {
     "Content-Type": "application/json",
 }  
 
+print("Envoie")
 
 # Get the size of the data set
 response = requests.post(
@@ -65,11 +66,9 @@ response = requests.post(
 
 # Vérifier la réponse
 print("Status code:", response.status_code)
-print("Response body:", response) #response.text)
+print("Response body:", response.json()["hits"]["hits"][0]) #response.text)
 
 
-test()
-"""
 """
 load_dotenv("../.private_env")
 
