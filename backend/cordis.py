@@ -77,11 +77,10 @@ def getAllLocalizationsFromDates(dateDebStr, dateFinStr, keywords):
     dateDeb = createDateFromStr(dateDebStr)
     dateFin = createDateFromStr(dateFinStr)
     
-    keywords = keywords.split(",")
-    keyword1 = keywords[0].lower()
-    keyword2 = keywords[-1].lower()
-
-    print(keyword1 + " " + keyword2)
+    if keywords != "":          
+        keywords = keywords.split(",")
+        keyword1 = keywords[0].lower()
+        keyword2 = keywords[-1].lower()
 
     for p in data.values():
 
@@ -97,9 +96,11 @@ def getAllLocalizationsFromDates(dateDebStr, dateFinStr, keywords):
 
             #suppression des espace et deb et fin
             listeKeywordsClear = [word.strip() for word in listeKeywords if word.strip()]
-
-            if keyword1 in listeKeywordsClear and keyword2 in listeKeywordsClear:
+            if keywords == "":
                 loc.extend(getAllLocalizationsFrom1Project(p))
+            else:
+                if keyword1 in listeKeywordsClear and keyword2 in listeKeywordsClear:
+                    loc.extend(getAllLocalizationsFrom1Project(p))
     
     ens = list(set(loc))
     res = []

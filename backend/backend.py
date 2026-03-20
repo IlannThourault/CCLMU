@@ -84,7 +84,11 @@ def get_filtered_results(anneeMin: int, anneeMax: int, moisMin: int, moisMax: in
     if moisMin == 1:
         moisMin = 0  
     list_kw = [k.strip().lower() for k in keywords.split(",")] if keywords else []
-    return hal.getDataFromFilters(anneeMin, anneeMax, moisMin, moisMax, list_kw[0], list_kw[-1])
+    if (keywords != ""):
+        return hal.getDataFromFilters(anneeMin, anneeMax, moisMin, moisMax, list_kw[0], list_kw[-1])
+    else:
+        return hal.getDataFromFilters(anneeMin, anneeMax, moisMin, moisMax)
+
 
 @app.get("/favicon.ico", include_in_schema=False)
 async def favicon():
