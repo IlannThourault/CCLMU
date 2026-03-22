@@ -18,6 +18,13 @@ app.add_middleware(
 
 print("Listening...")
 
+@app.get("/favicon.ico", include_in_schema=False)
+async def favicon():
+    return Response(content="", media_type="image/x-icon")
+
+
+
+############ SCANR ###########
 @app.get("/scanR")
 def get_markers():
     return scanR.get_markers()
@@ -70,6 +77,10 @@ def getAllProject(nomOrga : str):
 
 
 
+############ HAL ###########
+
+
+
 #http://localhost:4200/hal/getCoordinatesFromDates?anneeMin=2000&anneeMax=2010&moisMin=1&moisMax=12
 
 # requette qui renvoie tous les points gps des organisations ayant colloborées dans un projet inclus dans les dates passées en param (hal)
@@ -90,6 +101,10 @@ def get_filtered_results(anneeMin: int, anneeMax: int, moisMin: int, moisMax: in
         return hal.getDataFromFilters(anneeMin, anneeMax, moisMin, moisMax)
 
 
-@app.get("/favicon.ico", include_in_schema=False)
-async def favicon():
-    return Response(content="", media_type="image/x-icon")
+
+@app.get("/hal/firstDate/month")
+def getFirstMonth():
+    return hal.getFirstMonth()
+@app.get("/hal/firstDate/year")
+def getFirstYear():
+    return hal.getFirstYear()

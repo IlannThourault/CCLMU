@@ -43,6 +43,39 @@ def getAllKeyWords():
 
 
 
+
+def getFirstMonth():
+    all_dates = []
+    
+    for project in data:
+        years = project.get("y", [])
+        months = project.get("m", [])
+        
+        if isinstance(years, list) and isinstance(months, list) and years:
+            project_min_date = min(zip(years, months))
+            all_dates.append(project_min_date)
+
+    if not all_dates:
+        return None, None
+
+    return min(all_dates)[1]
+
+def getFirstYear():
+    all_dates = []
+    
+    for project in data:
+        years = project.get("y", [])
+        months = project.get("m", [])
+        
+        if isinstance(years, list) and isinstance(months, list) and years:
+            project_min_date = min(zip(years, months))
+            all_dates.append(project_min_date)
+
+    if not all_dates:
+        return None, None
+
+    return min(all_dates)[0]
+
 # Dans hal.py, modifiez la fonction getDataFromFilters
 def getDataFromFilters(anneeMin, anneeMax, moisMin, moisMax, keyword1=None, keyword2=None):
     results = []
