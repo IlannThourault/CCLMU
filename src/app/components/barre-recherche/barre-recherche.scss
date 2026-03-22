@@ -62,3 +62,43 @@
         }
     }
 }
+
+/* --- CSS AJOUTÉ POUR LA LOUPE --- */
+
+.autocomplete-wrapper {
+  position: relative; /* Indispensable pour le placement du bouton */
+  display: flex;
+  align-items: center;
+}
+
+.btn-loupe-search {
+  position: absolute;
+  right: 10px;         /* Ajuste selon ton padding d'input */
+  background: #4F6814; /* Ton vert */
+  color: #EDEBE5;      /* Ton beige */
+  border: none;
+  border-radius: 12px;
+  width: 150px;
+  height: 32px;
+  cursor: pointer;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  font-size: 1rem;
+  z-index: 10;
+  transition: transform 0.2s ease;
+
+  &:hover {
+    transform: scale(1.1);
+  }
+
+  &:active {
+    transform: scale(0.9);
+  }
+}
+
+/* Optionnel : ajoute un peu de padding à droite de ton input original 
+   pour que le texte ne passe pas SOUS la loupe */
+input {
+  padding-right: 45px !important;
+}

@@ -229,10 +229,10 @@ def getAllKeywords():
             temp = temp.split(", ")
             
             for word in temp:
-                names.append(word)
+                names.append(word.lower())
     
 
-    #suppression des espace et deb et fin
+    #suppression des espace en deb et fin
     res = []
     for word in names:
         newWord = word

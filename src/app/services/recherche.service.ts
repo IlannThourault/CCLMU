@@ -1,5 +1,6 @@
 import { Injectable, signal, inject, computed} from '@angular/core';
 import { HttpClient } from '@angular/common/http'; 
+import { Subject } from 'rxjs';
 
 export interface ChampRecherche {
   valeur: string;
@@ -24,8 +25,16 @@ export class RechercheService {
   champs = signal<ChampRecherche[]>([]);
   readonly champsRecherche = this.champs.asReadonly();
 
+  // déclanchement du bouton loupe
+  private rechercheDeclencheeSource = new Subject<void>();
+  rechercheDeclenchee$ = this.rechercheDeclencheeSource.asObservable();
+
   constructor() {
     this.chargerDonnees();
+  }
+
+  lancerRechercheForcee() {
+    this.rechercheDeclencheeSource.next();
   }
 
     // Cette variable renverra toujours "Mot1, Mot2, Mot3" automatiquement

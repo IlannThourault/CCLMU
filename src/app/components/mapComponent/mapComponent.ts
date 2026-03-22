@@ -51,7 +51,7 @@ export class MapComponent implements AfterViewInit {
     }
   }
 
-  private initMap(L: any) {
+  private async initMap(L: any) {
     this.map = L.map('map')
 
     fetch('https://nominatim.openstreetmap.org/search?format=json&q=Le+Mans,France')
@@ -68,8 +68,10 @@ export class MapComponent implements AfterViewInit {
     }).addTo(this.map);
 
     this.markersGroup = L.markerClusterGroup();
-
     this.map.addLayer(this.markersGroup);
+
+    // premier affichage des points
+    await this.addMarker(new Date("2014-05-01"), new Date("2030-02-28"), "");
 
     // Gestion des boutons dans le popup
     this.map.on('popupopen', (e: any) => {
@@ -78,6 +80,7 @@ export class MapComponent implements AfterViewInit {
         const nom = button.id.replace('btn-', '');
 
         button.addEventListener('click', () => {
+            this.scrollerParPourcentage(20);
             console.log('Clic sur :', nom);
             this.projectService.emettreVoirPlus(nom);
         });
@@ -144,4 +147,15 @@ export class MapComponent implements AfterViewInit {
     this.markersGroup.addLayer(marker);
   });
   }
+
+  scrollerParPourcentage(pourcentage: number) {
+  // 1. Calculer la valeur en pixels (ex: 0.5 pour 50%)
+  const pixelsAScroller = window.innerHeight * (pourcentage / 100);
+
+  // 2. Exécuter le scroll relatif
+  window.scrollBy({
+    top: pixelsAScroller,
+    behavior: 'smooth' // Pour un mouvement fluide
+  });
+}
 }

@@ -1,7 +1,94 @@
+:host {
+  display: block;
+  padding: 20px;
+  font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+}
+
 .project-card {
-  border: 1px solid #ccc;
-  padding: 16px;
-  margin-bottom: 16px;
-  border-radius: 8px;
-  background-color: #f9f9f9;
+  position: relative;
+  border: none;
+  padding: 24px;
+  margin-bottom: 20px;
+  border-radius: 12px;
+  background-color: #EDEBE5; // Ton beige
+  color: #333;
+  box-shadow: 0 4px 6px rgba(0,0,0,0.1);
+  transition: transform 0.2s ease, box-shadow 0.2s ease;
+  overflow: hidden;
+
+  // La petite barre de rappel du slider sur le côté
+  &::before {
+    content: '';
+    position: absolute;
+    left: 0;
+    top: 0;
+    bottom: 0;
+    width: 6px;
+    background: #4F6814; // Ton vert
+  }
+
+  &:hover {
+    transform: translateY(-4px);
+    box-shadow: 0 8px 15px rgba(0,0,0,0.15);
+  }
+
+  h2 {
+    color: #4F6814;
+    margin-top: 0;
+    font-size: 1.5rem;
+    border-bottom: 2px solid rgba(79, 104, 20, 0.1);
+    padding-bottom: 8px;
+  }
+
+  .teaser {
+    font-style: italic;
+    color: #555;
+    margin: 12px 0;
+  }
+
+  .dates {
+    display: inline-block;
+    background-color: #4F6814;
+    color: #EDEBE5;
+    padding: 6px 15px;
+    border-radius: 20px;
+    font-size: 0.9rem;
+    margin-bottom: 15px;
+
+    b { color: #fff; }
+  }
+
+  .contributors-box {
+    background: rgba(255, 255, 255, 0.5);
+    padding: 12px;
+    border-radius: 8px;
+    border: 1px dashed #4F6814;
+
+    ul {
+      display: flex;
+      flex-wrap: wrap;
+      gap: 10px;
+      list-style: none;
+      padding: 0;
+      margin: 8px 0 0 0;
+
+      li {
+        background: #4F6814;
+        color: #EDEBE5;
+        padding: 4px 10px;
+        border-radius: 4px;
+        font-size: 0.8rem;
+      }
+    }
+  }
+}
+
+// Message quand la liste est vide
+.empty-state {
+  text-align: center;
+  color: #EDEBE5;
+  background: #4F6814;
+  padding: 40px;
+  border-radius: 15px;
+  font-size: 1.2rem;
 }

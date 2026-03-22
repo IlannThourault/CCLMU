@@ -8,6 +8,10 @@
         [(ngModel)]="recherche"
         (input)="filtrerSuggestions($event)" 
       />
+
+      <button (click)="lancerRecherche()" class="btn-loupe-search">
+        Appliquer les filtres
+      </button>
       
       <ul class="suggestions-list" *ngIf="suggestionsFiltrees.length > 0 && rechercheService.champs().length < 2">
         <li *ngFor="let suggestion of suggestionsFiltrees" 

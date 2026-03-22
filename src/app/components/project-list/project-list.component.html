@@ -1,11 +1,27 @@
-<div *ngFor="let project of projects" class="project-card">
-  <h2>{{ project.title }}</h2>
-  <p>{{ project.teaser }}</p>
-  <p><b>Début:</b> {{ project.startDate }} | <b>Fin:</b> {{ project.endDate }}</p>
-  <div>
-    <b>Contributeurs:</b>
-    <ul>
-      <li *ngFor="let c of project.allContributors">{{ c }}</li>
-    </ul>
-  </div>
+<div *ngIf="projects.length > 0; else noProject">
+  <div *ngFor="let project of projects" class="project-card">
+    <h2>{{ project.title }}</h2>
+    
+    <p class="teaser">{{ project.teaser }}</p>
+    
+    <div class="dates">
+        <span><b>Début:</b> {{ project.startDate }}</span>
+        <span><b> | Fin:</b> {{ project.endDate }}</span>
+        </div>
+        <div id="liste-projets-section" class="project-card-container">
+
+            <div class="contributors-box">
+                <b>Contributeurs du projet :</b>
+                <ul>
+                    <li *ngFor="let c of project.allContributors">{{ c }}</li>
+                </ul>
+            </div>
+        </div>
+    </div>
 </div>
+
+<ng-template #noProject>
+  <div class="empty-state">
+    <p>Sélectionnez une organisation sur la carte pour voir ses projets.</p>
+  </div>
+</ng-template>

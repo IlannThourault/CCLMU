@@ -70,6 +70,12 @@ export class SliderComponent {
 
         this.startPos = 0;
         this.endPos = 1;
+
+        // click sur la loupe de la barre de recherche
+        this.rechercheService.rechercheDeclenchee$.subscribe(() => {
+        this.draggedFromHandle = true; // On simule un drag pour passer la sécurité de stopDrag
+        this.stopDrag();
+    });
     }
 
   dateToPosition(date: Date): number {
