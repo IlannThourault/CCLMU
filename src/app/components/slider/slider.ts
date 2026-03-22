@@ -12,14 +12,14 @@ import { MapService } from '../../map-service';
 import { RechercheService } from '../../services/recherche.service';
 
 @Component({
-  selector: 'app-slider',
-  standalone: true,
-  imports: [
-    CommonModule,
-    DatePipe
-  ],
-  templateUrl: './slider.html',
-  styleUrls: ['./slider.scss']
+    selector: 'app-slider',
+    standalone: true,
+    imports: [
+        CommonModule,
+        DatePipe
+    ],
+    templateUrl: './slider.html',
+    styleUrls: ['./slider.scss']
 })
 export class SliderComponent {
 
@@ -44,23 +44,35 @@ export class SliderComponent {
     async ngOnInit() {
         const [
             firstYear, firstMonth, firstDay,
-            lastYear, lastMonth, lastDay
+            lastYear, lastMonth, lastDay,
+            firstYearHAL, firstMonthHAL
         ] = await Promise.all([
             fetch("http://localhost:4200/cordis/firstDate/year"),
             fetch("http://localhost:4200/cordis/firstDate/month"),
             fetch("http://localhost:4200/cordis/firstDate/day"),
             fetch("http://localhost:4200/cordis/lastDate/year"),
             fetch("http://localhost:4200/cordis/lastDate/month"),
-            fetch("http://localhost:4200/cordis/lastDate/day")
+            fetch("http://localhost:4200/cordis/lastDate/day"),
+            fetch("http://localhost:4200/hal/firstDate/year"),
+            fetch("http://localhost:4200/hal/firstDate/month")
         ]);
 
-        const firstYearRes = Number(await firstYear.text());
-        const firstMonthRes = Number(await firstMonth.text());
+        let firstYearRes = Number(await firstYear.text());
+        let firstMonthRes = Number(await firstMonth.text());
         const firstDayRes = Number(await firstDay.text());
 
         const lastYearRes = Number(await lastYear.text());
         const lastMonthRes = Number(await lastMonth.text());
         const lastDayRes = Number(await lastDay.text());
+
+
+        const firstMonthResHAL = Number(await firstMonthHAL.text());
+        const firstYearResHAL = Number(await firstYearHAL.text());
+
+        if (firstYearResHAL < firstYearRes) {
+            firstYearRes = firstYearResHAL;
+            firstMonthRes = firstMonthResHAL;
+        }
 
         this.minDate = new Date(firstYearRes, firstMonthRes - 1, firstDayRes);
         this.maxDate = new Date(lastYearRes, lastMonthRes - 1, lastDayRes);
@@ -78,58 +90,58 @@ export class SliderComponent {
     });
     }
 
-  dateToPosition(date: Date): number {
-    const total = this.maxDate.getTime() - this.minDate.getTime();
-    const delta = date.getTime() - this.minDate.getTime();
-    return delta / total;
-  }
-
-  positionToDate(position: number): Date {
-    const total = this.maxDate.getTime() - this.minDate.getTime();
-    const timestamp = this.minDate.getTime() + total * position;
-    return new Date(timestamp);
-  }
-
-  startDrag(type: 'start' | 'end', event: MouseEvent) {
-    event.stopPropagation();
-    this.dragging = type;
-    this.draggedFromHandle = true;
-  }
-
-  minGapYears = 3;
-
-  @HostListener('document:mousemove', ['$event'])
-  onMouseMove(event: MouseEvent) {
-  if (!this.dragging) return;
-
-  const rect = this.slider.nativeElement.getBoundingClientRect();
-  let percent = (event.clientY - rect.top) / rect.height;
-  percent = Math.max(0, Math.min(1, percent));
-
-  const newDate = this.positionToDate(percent);
-
-  if (this.dragging === 'start') {
-    const maxStartDate = new Date(this.endDate);
-    maxStartDate.setFullYear(maxStartDate.getFullYear() - this.minGapYears);
-
-    if (newDate <= maxStartDate) {
-      this.startPos = percent;
-      this.startDate = newDate;
+    dateToPosition(date: Date): number {
+        const total = this.maxDate.getTime() - this.minDate.getTime();
+        const delta = date.getTime() - this.minDate.getTime();
+        return delta / total;
     }
-  }
 
-  if (this.dragging === 'end') {
-    const minEndDate = new Date(this.startDate);
-    minEndDate.setFullYear(minEndDate.getFullYear() + this.minGapYears);
-
-    if (newDate >= minEndDate) {
-      this.endPos = percent;
-      this.endDate = newDate;
+    positionToDate(position: number): Date {
+        const total = this.maxDate.getTime() - this.minDate.getTime();
+        const timestamp = this.minDate.getTime() + total * position;
+        return new Date(timestamp);
     }
-  }
-}
 
-  timeoutId: any;
+    startDrag(type: 'start' | 'end', event: MouseEvent) {
+        event.stopPropagation();
+        this.dragging = type;
+        this.draggedFromHandle = true;
+    }
+
+    minGapYears = 3;
+
+    @HostListener('document:mousemove', ['$event'])
+    onMouseMove(event: MouseEvent) {
+        if (!this.dragging) return;
+
+        const rect = this.slider.nativeElement.getBoundingClientRect();
+        let percent = (event.clientY - rect.top) / rect.height;
+        percent = Math.max(0, Math.min(1, percent));
+
+        const newDate = this.positionToDate(percent);
+
+        if (this.dragging === 'start') {
+            const maxStartDate = new Date(this.endDate);
+            maxStartDate.setFullYear(maxStartDate.getFullYear() - this.minGapYears);
+
+            if (newDate <= maxStartDate) {
+            this.startPos = percent;
+            this.startDate = newDate;
+            }
+        }
+
+        if (this.dragging === 'end') {
+            const minEndDate = new Date(this.startDate);
+            minEndDate.setFullYear(minEndDate.getFullYear() + this.minGapYears);
+
+            if (newDate >= minEndDate) {
+            this.endPos = percent;
+            this.endDate = newDate;
+            }
+        }
+    }
+
+    timeoutId: any;
 
     draggedFromHandle: boolean = false;
 
