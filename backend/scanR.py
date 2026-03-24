@@ -3,25 +3,30 @@ import json
 from dotenv import load_dotenv
 import os
 
-# Charger le .env (depuis la racine)
-load_dotenv("../.private_env")
+# Charger le .env
+if os.path.exists(".private_env"):
+    load_dotenv(".private_env")
+elif os.path.exists("../.private_env"):
+    load_dotenv("../.private_env")
+else:
+    print("Error: .private_env file not found")
+    exit()
 
 username = os.getenv("SCANR_USERNAME")
 password = os.getenv("SCANR_PASSWORD")
 
-if (username is None):
+if username is None:
   print("Error : Failed to fetch .private_env::SCANR_USERNAME")
   exit()
-if (password is None):
+if password is None:
   print("Error : Failed to fetch .private_env::SCANR_PASSWORD")
   exit()
 
 
 url = "https://cluster-production.elasticsearch.dataesr.ovh/scanr-organizations/_search"
-
 headers = {
     "Content-Type": "application/json",
-}  
+}
 
 print("Envoie")
 
@@ -64,9 +69,9 @@ response = requests.post(
   })    # raw body JSON
 )
 
-# Vérifier la réponse
+
 print("Status code:", response.status_code)
-print("Response body:", response.json()["hits"]["hits"][0]) #response.text)
+print("Response body:", response.json()["hits"]["hits"][0])
 
 
 """
