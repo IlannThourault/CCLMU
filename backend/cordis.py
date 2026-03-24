@@ -290,3 +290,4 @@ print(getLastDateDay())
  #   print(getLocFromName(orga))
 
 #print(getAllProject("METACOUSTIC"))
+getAllProject("UNIVERSITE DU MANS")

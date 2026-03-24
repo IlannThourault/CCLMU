@@ -100,7 +100,9 @@ def get_filtered_results(anneeMin: int, anneeMax: int, moisMin: int, moisMax: in
     else:
         return hal.getDataFromFilters(anneeMin, anneeMax, moisMin, moisMax)
 
-
+@app.get("/hal/getProjectsFromCollab")
+def getProjectsFromCollab(nomOrga: str, limite: int):
+    return hal.getProjectsFromCollab(nomOrga, limite)
 
 @app.get("/hal/firstDate/month")
 def getFirstMonth():

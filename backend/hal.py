@@ -1,6 +1,7 @@
 import re
 import json
 from collections import Counter
+import requests
 
 # Chargement des données
 with open("../public/coorHal.json", "r") as f:
@@ -118,4 +119,46 @@ def getDataFromFilters(anneeMin, anneeMax, moisMin, moisMax, keyword1=None, keyw
     
     return results
 
+
+#de base à 5 pour limiter le temps de réponse de l'api
+def getProjectsFromCollab(nomOrga, limite=5):
+    #retourne les porjets en collaboration d'une organisation avec le mans (même format que cordis)
+    query = f'structName_s:"{nomOrga}"'
+
+    fields = "title_s,abstract_s,producedDate_s,authFullName_s,label_s"
+    url = f"https://api.archives-ouvertes.fr/search/?q={query}&fl={fields}&rows={limite}&wt=json"
+
+    listeProjects = []
+
+    try:
+        response = requests.get(url)
+        if response.status_code == 200:
+            docs = response.json().get('response', {}).get('docs', [])
+            
+            for d in docs:
+                title = d.get('title_s', ["Sans titre"])[0]
+                abstract = d.get('abstract_s', ["Pas de résumé disponible"])[0]
+                date_prod = d.get('producedDate_s', "2000-01-01")
+                #formatage de la date
+                if len(date_prod) == 4: date_prod += "-01-01"
+                
+                contributors = d.get('authFullName_s', [])
+
+                listeProjects.append({
+                    "title": title,
+                    "teaser": d.get('label_s', "")[:200] + "...", # Un extrait de la citation
+                    "description": abstract,
+                    "cost": 0, # pas de référencement annnocé dans HAL
+                    "startDate": date_prod,
+                    "endDate": date_prod,
+                    "allContributors": contributors
+                })
+    except Exception as e:
+        print(f"Erreur lors de la requête HAL : {e}")
+
+    return listeProjects
+
+
 #print(getDataFromFilters(1900, 2030, 0, 12, "le mans"))
+
+#print(getProjectsFromCollab("Roberval", 10))
