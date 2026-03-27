@@ -125,7 +125,7 @@ def getProjectsFromCollab(nomOrga, limite=5):
     #retourne les porjets en collaboration d'une organisation avec le mans (même format que cordis)
     query = f'structName_s:"{nomOrga}"'
 
-    fields = "title_s,abstract_s,producedDate_s,authFullName_s,label_s"
+    fields = "title_s,abstract_s,producedDate_s,authFullName_s,label_s,authStructName_s,structName_s"
     url = f"https://api.archives-ouvertes.fr/search/?q={query}&fl={fields}&rows={limite}&wt=json"
 
     listeProjects = []
@@ -142,7 +142,8 @@ def getProjectsFromCollab(nomOrga, limite=5):
                 #formatage de la date
                 if len(date_prod) == 4: date_prod += "-01-01"
                 
-                contributors = d.get('authFullName_s', [])
+                contributors = d.get("authStructName_s") or d.get("structName_s") or []
+
 
                 listeProjects.append({
                     "title": title,
@@ -159,6 +160,11 @@ def getProjectsFromCollab(nomOrga, limite=5):
     return listeProjects
 
 
+###Tests
+
 #print(getDataFromFilters(1900, 2030, 0, 12, "le mans"))
 
-#print(getProjectsFromCollab("Roberval", 10))
+org = "Brown University"
+
+
+#print(getProjectsFromCollab(org, 10))
