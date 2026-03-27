@@ -1,0 +1,280 @@
+\documentclass[12pt]{article}
+
+\usepackage[T1]{fontenc}
+\usepackage[utf8]{inputenc}
+\usepackage[french]{babel}
+\usepackage[a4paper,margin=2cm]{geometry}
+\usepackage[hidelinks]{hyperref}
+\usepackage{graphicx}
+\usepackage{inconsolata}
+
+\begin{document}
+
+\begin{center}
+\begin{minipage}{0.25\textwidth}
+    \centering
+    \includegraphics[width=\linewidth]{LMU.png}
+\end{minipage}
+\hfill
+\begin{minipage}{0.3\textwidth}
+    \centering
+    \includegraphics[width=\linewidth]{IC2.png}
+\end{minipage}
+
+\vspace{1cm}
+
+{\LARGE \textbf{Uvicorn, FastAPI, Dotenv et Requests}}\\
+{\large \textbf{Tutoriel sur la création d'API backend avec Python}}\\
+{\large Le Mans Université}\\
+\vspace{1cm}
+{\large Projet de troisième année de licence}\\
+{\small Rédigé par :}\\
+{\small REVERBEL--LONGHI Lucas}\\
+{\small MORIN Nathan}\\
+{\small THOURAULT Ilann}\\
+\end{center}
+
+\begin{figure}[h]
+\centering
+\begin{minipage}{0.20\textwidth}
+    \centering
+    \includegraphics[width=\linewidth]{requests.png}
+\end{minipage}
+\hfill
+\begin{minipage}{0.3\textwidth}
+    \centering
+    \includegraphics[width=\linewidth]{FastAPI.png}
+\end{minipage}
+\hfill
+\begin{minipage}{0.25\textwidth}
+    \centering
+    \includegraphics[width=\linewidth]{uvicorn.png}
+\end{minipage}
+\end{figure}
+
+
+\section{Introduction}
+L'objectif de ce tutoriel est de vous apprendre à construire une API en backend avec \textit{Python}.
+Ces quatre librairies sont une alternative intelligente à \textbf{NodeJS} avec \textbf{Express} par exemple.
+Notamment, \textit{Python} permet une utilisation plus simple, tout en étant extrêmement extensible. Avec par exemple une simplicité pour ajouter de l'IA aux projets.
+
+Pour cela, nous allons utiliser Uvicorn, FastAPI, Dotenv et Requests.
+
+\section{Dotenv}
+Dotenv permet de charger des variables d'environnement dans du code \textit{Python}.
+
+\subsection{Initialisation}
+\begin{itemize}
+    \item Installation : avec la commande bash : \texttt{pip install python-dotenv}
+    \item Importation :
+        \begin{verbatim}
+            from dotenv import load_dotenv
+            import os
+        \end{verbatim}
+\end{itemize}
+
+La librairie \texttt{os} sera utiliser avec Dotenv pour lire les variables d'environNement. 
+\\
+\\Certaines APIs demandent des clefs d'authentification.
+Le problème est que ces clefs ne doivent pas apparaître sur votre dépôt git (pour des raisons de sécurité, elles doivent être transmises en privé).
+Il est conseillé d'utiliser un environnement public pour les usages qui peuvent être lu par tous, et un privé pour gérer des accès privés.
+\\À partir d'ici nous considérerons deux fichiers d'environnement: \texttt{.public\_env} et \texttt{.private\_env}, en nous intéressant principalement au second fichier.
+\\Une première version de \texttt{.private\_env} peut être rendu public sur le dépôt, pour définir les noms et structures de ce fichier. 
+Par exemple pour l'API de scanR :
+\begin{verbatim}
+    SCANR_USERNAME=
+    SCANR_PASSWORD=
+\end{verbatim}
+De plus, il faut ajouter \texttt{.private\_env} dans le \texttt{.gitignore} pour écarter tout danger.
+
+\subsection{Utilisation}
+Une fois l'importation faite et l'initialisation du fichier \texttt{.private\_env}, nous pouvons maintenant montrer comment utiliser Dotenv.
+\\
+\\Il y a un premier problème. On voudrait faire : \texttt{load\_dotenv(".private\_env")} mais \textit{Python} charge les fichiers à partir de la racine de l'exécution.
+Des erreurs peuvent donc intervenir rapidement si le code est exécuter depuis la racine plutôt que depuis le répertoire \textit{backend} par exemple.
+\\La solution est d'utiliser la fonction \texttt{os.path.exists()} ! Voici un exemple d'implémentation :
+\begin{verbatim}
+    if os.path.exists(".private_env"):
+        load_dotenv(".private_env")
+    elif os.path.exists("../.private_env"):
+        load_dotenv("../.private_env")
+    else:
+        print("Error: .private_env file not found")
+        exit()
+\end{verbatim}
+
+Maintenant que \texttt{.private\_env} est chargé, nous pouvons récupérer les champs requis pour la suite : 
+\begin{verbatim}
+    username = os.getenv("SCANR_USERNAME")
+    password = os.getenv("SCANR_PASSWORD")
+\end{verbatim}
+
+Il est possible que ces champs ne soient pas récupérables et dans ce cas, il faut le vérifier :
+\begin{verbatim}
+    if username is None:
+        print("Error : Failed to fetch .private_env::SCANR_USERNAME")
+        exit()
+    if password is None:
+        print("Error : Failed to fetch .private_env::SCANR_PASSWORD")
+        exit()
+\end{verbatim}
+
+Ces deux variables sont donc maintenant utilisables, par exemple :
+\begin{verbatim}
+    print(f"{username} : {password}")
+    >> etu_le_mans_scanR : Aqkdjuu23_kjloiQ
+\end{verbatim}
+
+\section{Requests}
+Requests est une librairie permettant d'effectuer des requêtes, elle est extrêmement utilisée dans le domaine du WEB / API en python.
+
+\subsection{Initialisation}
+\begin{itemize}
+    \item Installation : avec la commande bash : \texttt{pip install requests}
+    \item Importation :
+        \begin{verbatim}
+            import requests
+            import json
+        \end{verbatim}
+\end{itemize}
+Avant d'effectuer des requêtes directement sous python, il est conseillé d'utiliser des outils comme \textbf{postman} pour bien se préparer.
+
+\subsection{Utilisation}
+Nous allons réutiliser \texttt{username} et \texttt{password}.
+\\Pour des raisons de clarté, il est recommandé de définir l'URL et le header dans des variables, pour ne pas surcharger l'appel ensuite :
+\begin{verbatim}
+    url = "https://cluster-production.elasticsearch.dataesr.ovh/scanr-organizations/_search"
+    headers = {
+        "Content-Type": "application/json",
+    }
+\end{verbatim}
+
+\par Il existe beaucoup de choses à faire avec cette librairie, nous allons vous montrer dans ce tutoriel comment effectuer une méthode POST, avec la fonction \texttt{requests.post()}.
+\begin{verbatim}
+    response = requests.post(
+        url,
+        auth=(username, password),
+        headers=headers,
+        data=json.dumps({
+        "query": {
+            "query_string": {
+                "fields": ["address.city"],
+                "query": "\"Le Mans\""
+            }
+            },
+            "from": 0,
+            "size": 100
+        })
+    )
+\end{verbatim}
+\par Cet exemple permet de récupérer sur l'API de scanR, les 100 premiers lieux situés au Mans.
+\par Le contenu du résultat de la requête est contenu dans la variable \texttt{response}.
+\begin{verbatim}
+    print("Status code:", response.status_code)
+    print("Response body:", response.json()["hits"]["hits"][0])
+\end{verbatim}
+Cette première ligne, affiche le code de retour, par exemple \textbf{404} ou \textbf{200} si tout c'est bien passé.
+\\La deuxième ligne affiche le corps de la réponse. \texttt{response.json()} renvoie un dictionnaire, il est donc facile de l'explorer avec la fonction \texttt{.keys()}.
+
+\par Tout ce dont vous pourriez avoir besoin est inscrit dans la documentation \cite{requestsDoc}
+
+\section{FastAPI}
+\begin{figure}[h]
+\centering
+\begin{minipage}{0.5\textwidth}
+    \centering
+    \includegraphics[width=\linewidth]{FastAPI.png}
+\end{minipage}
+\end{figure}
+
+FastAPI est une librairie \textit{Python} permettant la création d'une API.
+
+\subsection{Initialisation}
+\begin{itemize}
+    \item Installation : \texttt{pip install fastapi[standard]}
+    \item Importation : 
+        \begin{verbatim}
+        from fastapi import FastAPI, Response
+        from fastapi.middleware.cors import CORSMiddleware
+        \end{verbatim}
+\end{itemize}
+
+\par De plus, il faut initialiser FastAPI, de cette façon : \texttt{app = FastAPI()}
+\\Le nom donné à cette variable est important pour la suite.
+
+\par Si votre API sera utilisée par un autre langage que \textit{Python}, il faut alors définir un middleware CORS \textit{(Cross-Origin Resource Sharing)}. 
+\\ Nous travaillons ici avec angular sur le port 8080, nous devons donc indiquer au middleware d'accepter le \textit{localhost} sur ce port.
+
+\begin{verbatim}
+    app.add_middleware(
+        CORSMiddleware,
+        allow_origins=["http://localhost:8080"],
+        allow_credentials=True,
+        allow_methods=["*"],
+        allow_headers=["*"],
+    )
+\end{verbatim}
+
+\par Les paramètres indiqués ne sont pas prévus pour la production, il faudra les vérifier et les adapter avant l'utilisation dans des cas réels.
+
+\subsection{Utilisation}
+Voici comme exemple, une requête qui envoie tous les points GPS des organisations ayant collaborées dans un projet inclus dans les dates passées en paramètre sur l'API HAL.
+
+\begin{verbatim}
+    @app.get("/hal/getCoordinatesFromDates")
+    def getCoordinatesFromDates(anneeMin: int, anneeMax: int, moisMin: int, moisMax: int):
+        return hal.getCoordinatesFromDates(anneeMin, anneeMax, moisMin, moisMax)
+\end{verbatim}
+
+\par Le décorateur @app correspond au nom donné au moment de l'initialisation de FastAPI.
+\\ Le paramètre donné à @app.get() correspond au chemin dans l'URL, par exemple ici : \\\texttt{http://localhost:8080/hal/getCoordinatesFromDates/}.
+\\ Les différents paramètres de la requête sont directement récupérés par la fonction inscrite juste en dessous, tant que les noms dans l'URL correspondent à ceux des arguments. 
+Ils peuvent néanmoins, être indiqué explicitement.
+\\ La recherche de correspondance entre l'URL et les méthodes se fait dans l'ordre de déclaration des fonctions. Si une fonction n'est pas trouvée, une erreur 404 sera renvoyée.
+
+\par Toute la documentation est disponible ici : \cite{fastAPIDoc}
+
+\section{Uvicorn}
+\begin{figure}[h]
+\centering
+\begin{minipage}{0.3\textwidth}
+    \centering
+    \includegraphics[width=\linewidth]{uvicorn.png}
+\end{minipage}
+\end{figure}
+Uvicorn est une \textit{Asynchronous Server Gateway Interface}. Nous l'utilisons pour lancer notre serveur.
+
+\subsection{Initialisation}
+\begin{itemize}
+    \item Installation : \texttt{pip install uvicorn}
+\end{itemize}
+
+\subsection{Utilisation}
+\begin{itemize}
+    \item Éxecution : \texttt{uvicorn main:app -{}-reload -{}-port 4000}
+\end{itemize}
+\texttt{-{}-reload} sert à relancer automatique l'éxecution lors d'un changement dans le code.
+\\\texttt{-{}-port} précise le port sur lequel votre API sera disponible. Il est conseillé d'inscrire le port dans le \texttt{.public\_env} pour qu'il soit commun au front-end et au back-end. 
+\\\texttt{app} correspond au nom avec lequel vous avez instancié \textbf{FastAPI} dans le code.
+
+\par Toute la documentation est inscrite ici : \cite{uvicornDoc}
+
+\section{Bibliographie}
+\begin{thebibliography}{9}
+
+\bibitem{requestsDoc}
+\textit{Documentation officielle de la librairie} \textbf{requests}
+\url{https://requests.readthedocs.io/}
+
+\bibitem{fastAPIDoc}
+\textit{Documentation officielle de la librairie} \textbf{FastAPI}
+\url{https://fastapi.tiangolo.com/}.
+
+\bibitem{uvicornDoc}
+\textit{Documentation officielle de la librairie} \textbf{Uvicorn}
+\url{https://uvicorn.dev/}.
+
+\end{thebibliography}
+
+
+\end{document}

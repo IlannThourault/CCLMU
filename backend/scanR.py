@@ -65,8 +65,8 @@ response = requests.post(
       }
     },
     "from": 0,
-    "size": size
-  })    # raw body JSON
+    "size": 100
+  })
 )
 
 
