@@ -73,7 +73,7 @@ Dotenv permet de charger des variables d'environnement dans du code \textit{Pyth
         \end{verbatim}
 \end{itemize}
 
-La librairie \texttt{os} sera utiliser avec Dotenv pour lire les variables d'environNement. 
+La librairie \texttt{os} sera utilisée avec Dotenv pour lire les variables d'environNement.
 \\
 \\Certaines APIs demandent des clefs d'authentification.
 Le problème est que ces clefs ne doivent pas apparaître sur votre dépôt git (pour des raisons de sécurité, elles doivent être transmises en privé).
@@ -91,7 +91,7 @@ De plus, il faut ajouter \texttt{.private\_env} dans le \texttt{.gitignore} pour
 Une fois l'importation faite et l'initialisation du fichier \texttt{.private\_env}, nous pouvons maintenant montrer comment utiliser Dotenv.
 \\
 \\Il y a un premier problème. On voudrait faire : \texttt{load\_dotenv(".private\_env")} mais \textit{Python} charge les fichiers à partir de la racine de l'exécution.
-Des erreurs peuvent donc intervenir rapidement si le code est exécuter depuis la racine plutôt que depuis le répertoire \textit{backend} par exemple.
+Des erreurs peuvent donc intervenir rapidement si le code est exécuté depuis la racine plutôt que depuis le répertoire \textit{backend} par exemple.
 \\La solution est d'utiliser la fonction \texttt{os.path.exists()} ! Voici un exemple d'implémentation :
 \begin{verbatim}
     if os.path.exists(".private_env"):
@@ -103,7 +103,7 @@ Des erreurs peuvent donc intervenir rapidement si le code est exécuter depuis l
         exit()
 \end{verbatim}
 
-Maintenant que \texttt{.private\_env} est chargé, nous pouvons récupérer les champs requis pour la suite : 
+Maintenant que \texttt{.private\_env} est chargé, nous pouvons récupérer les champs requis pour la suite :
 \begin{verbatim}
     username = os.getenv("SCANR_USERNAME")
     password = os.getenv("SCANR_PASSWORD")

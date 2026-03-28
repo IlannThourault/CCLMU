@@ -1,4 +1,4 @@
-This is pdfTeX, Version 3.141592653-2.6-1.40.29 (TeX Live 2026/Arch Linux) (preloaded format=pdflatex 2026.3.20)  27 MAR 2026 16:40
+This is pdfTeX, Version 3.141592653-2.6-1.40.29 (TeX Live 2026/Arch Linux) (preloaded format=pdflatex 2026.3.20)  28 MAR 2026 18:57
 entering extended mode
  restricted \write18 enabled.
  %&-line parsing enabled.
@@ -476,9 +476,9 @@ n/ec/ecrm1440.600pk> </home/esperluette/.texlive/texmf-var/fonts/pk/ljfour/jkna
 ppen/ec/ecbx1440.600pk> </home/esperluette/.texlive/texmf-var/fonts/pk/ljfour/j
 knappen/ec/ecbx2074.600pk></usr/share/texmf-dist/fonts/type1/public/inconsolata
 /Inconsolata-zi4r.pfb>
-Output written on Tuto_API.pdf (5 pages, 947151 bytes).
+Output written on Tuto_API.pdf (5 pages, 947432 bytes).
 PDF statistics:
- 423 PDF objects out of 1000 (max. 8388607)
+ 424 PDF objects out of 1000 (max. 8388607)
  129 compressed objects within 2 object streams
  24 named destinations out of 1000 (max. 500000)
  138 words of extra memory for PDF output out of 10000 (max. 10000000)
