@@ -2,14 +2,13 @@ import { Component, OnInit } from '@angular/core';
 import { CommonModule } from '@angular/common';
 import { HttpClient, HttpClientModule } from '@angular/common/http';
 import { ProjectService } from '../../services/project.services';
+import { forkJoin } from 'rxjs';
 
 interface Project {
     title: string;
     teaser: string;
     description: string;
-    cost: string;
-    startDate: string;
-    endDate: string;
+    date: string;
     allContributors: string[];
 }
 
@@ -37,16 +36,22 @@ export class ProjectListComponent implements OnInit {
             console.log("Nom reçu depuis la carte :", nomProjet);
             
             // Appel a l'api avec le bon projet
-            const url = `http://localhost:4200/cordis/listOfProject?nomOrga=${encodeURIComponent(nomProjet)}`;
+            const urlCordis = `http://localhost:4200/cordis/listOfProject?nomOrga=${encodeURIComponent(nomProjet)}`;
+            const urlHal = `http://localhost:4200/hal/getProjectsFromCollab?nomOrga=${encodeURIComponent(nomProjet)}&limite=10`;
+
+            const cordisRequest = this.http.get<Project[]>(urlCordis);
+            const halRequest = this.http.get<Project[]>(urlHal);
+
             
-            this.http.get<Project[]>(url).subscribe({
-                next: (data) => {
-                this.projects = data;
-                console.log("Projets récupérés :", this.projects);
+            
+            forkJoin([cordisRequest, halRequest]).subscribe({
+                next: ([dataCordis, dataHal]) => {
+                this.projects = [...dataCordis, ...dataHal];;
+                console.log("Projets Hal récupérés :", this.projects[0]);
+                console.log("Projets Cordis récupérés :", this.projects[1]);
+
                 },
             });
         });
-    }
-
-    
+    }  
 }

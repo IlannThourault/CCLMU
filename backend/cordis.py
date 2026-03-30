@@ -259,13 +259,11 @@ def getAllProject(nomOrga):
                     title = p["project"]["title"]
                     teaser = p["project"]["teaser"]
                     description = p["project"]["objective"]
-                    cost = p["project"]["totalCost"]
-                    startDate = p["project"]["startDate"]
-                    endDate = p["project"]["endDate"]
+                    date = p["project"]["startDate"]
                     
                     allContributors = getAllOrganizationsFrom1Project(p)
 
-                    listeProjects.append({"title" : title, "teaser" : teaser, "description" : description, "cost" : cost, "startDate" : startDate, "endDate" : endDate, "allContributors" : allContributors})
+                    listeProjects.append({"title" : title, "teaser" : teaser, "description" : description, "date" : date, "allContributors" : allContributors})
 
     return listeProjects
 

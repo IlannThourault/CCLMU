@@ -149,9 +149,7 @@ def getProjectsFromCollab(nomOrga, limite=5):
                     "title": title,
                     "teaser": d.get('label_s', "")[:200] + "...", # Un extrait de la citation
                     "description": abstract,
-                    "cost": 0, # pas de référencement annnocé dans HAL
-                    "startDate": date_prod,
-                    "endDate": date_prod,
+                    "date": date_prod,
                     "allContributors": contributors
                 })
     except Exception as e:
@@ -164,7 +162,7 @@ def getProjectsFromCollab(nomOrga, limite=5):
 
 #print(getDataFromFilters(1900, 2030, 0, 12, "le mans"))
 
-org = "Brown University"
+org = "Dpt Néphrologie Dialyse Transplantation [CHU Angers]"
 
 
 #print(getProjectsFromCollab(org, 10))
