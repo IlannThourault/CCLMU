@@ -5,6 +5,7 @@ import scanR
 import cordis
 import hal
 
+#Instenciation de FastAPI
 app = FastAPI()
 
 # Autoriser Angular (CORS)
@@ -23,11 +24,12 @@ async def favicon():
     return Response(content="", media_type="image/x-icon")
 
 
-
+""" Not used
 ############ SCANR ###########
 @app.get("/scanR")
 def get_markers():
     return scanR.get_markers()
+"""
 
 @app.get("/cordis/firstDate")
 def getFirtDate():
