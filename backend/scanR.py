@@ -28,7 +28,6 @@ headers = {
     "Content-Type": "application/json",
 }
 
-print("Envoie...")
 
 # Récupération du nombre de résultâts
 response = requests.post(
@@ -47,9 +46,7 @@ response = requests.post(
 )
 
 
-print("Status code:", response.status_code)
 size = response.json()["hits"]["total"]["value"]
-print("Response body:", size)
 
 # Requete avec la bonne taille
 response = requests.post(
@@ -68,9 +65,6 @@ response = requests.post(
   })
 )
 
-print("Status code:", response.status_code)
-body = response.json()["hits"]["hits"]
-print("Response body:", body)
 
 def get_markers(marker): # temp
     return body[marker]

@@ -110,7 +110,6 @@ def getAllLocalizationsFromDates(dateDebStr, dateFinStr, keywords):
 
     return res
             
-print(len(getAllLocalizationsFromDates("2010-07-16", "2030-07-16", "Food sciences")))
 
 ##### Liste des orgas du Mans
 
@@ -159,13 +158,7 @@ def getLocFromName(nomOrga: str):
     return "ERROR : Le nomOrga n'existe pas"
     
 
-#print(getLocFromName("METACOUSTIC"))
-#print(getLocFromName("Centre Hospitalier Le Mans"))
-#print(getLocFromName("SILENTSYS"))
-#print(getLocFromName("ACO AUTOMOBILE CLUB DE L'OUEST"))
-#print(getLocFromName("GUATECS"))
-#print(getLocFromName("COMMUNAUTE URBAINE DE LE MANS METROPOLE")) ne pas utiliser pour le moment car adresse a mont de marsan
-#print(getLocFromName("UNIVERSITE DU MANS"))
+
 
 def getFirtDate():
     firstDate = datetime.date(9999, 12, 31)
@@ -246,7 +239,6 @@ def getAllKeywords():
     return set(res) 
 
 
-#print(getAllKeywords())
 
 
 def getAllProject(nomOrga):
@@ -267,25 +259,3 @@ def getAllProject(nomOrga):
 
     return listeProjects
 
-
-
-listeContributeurs = getListContributors("UNIVERSITE DU MANS")
-'''
-print(getFirtDate())
-print(getFirstDateYear())
-print(getFirstDateMonth())
-print(getFirstDateDay())
-print(getLastDate())
-print(getLastDateYear())
-print(getLastDateMonth())
-print(getLastDateDay())
-'''
-
-#for i in getAllLocalizationsFromDates("2016-09-01", "2019-09-01"):
-#    print(i)
-
-#for orga in listeContributeurs:
- #   print(getLocFromName(orga))
-
-#print(getAllProject("METACOUSTIC"))
-getAllProject("UNIVERSITE DU MANS")

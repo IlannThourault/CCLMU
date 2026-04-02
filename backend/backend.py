@@ -1,7 +1,11 @@
 from fastapi import FastAPI, Response
 from fastapi.middleware.cors import CORSMiddleware
 
-import scanR
+
+#not used
+#import scanR
+
+
 import cordis
 import hal
 
@@ -17,7 +21,6 @@ app.add_middleware(
     allow_headers=["*"],
 )
 
-print("Listening...")
 
 @app.get("/favicon.ico", include_in_schema=False)
 async def favicon():

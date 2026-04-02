@@ -158,11 +158,3 @@ def getProjectsFromCollab(nomOrga, limite=5):
     return listeProjects
 
 
-###Tests
-
-#print(getDataFromFilters(1900, 2030, 0, 12, "le mans"))
-
-org = "Dpt Néphrologie Dialyse Transplantation [CHU Angers]"
-
-
-#print(getProjectsFromCollab(org, 10))
