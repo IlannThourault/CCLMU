@@ -9,6 +9,7 @@ interface Project {
     teaser: string;
     description: string;
     date: string;
+    cout: string;
     allContributors: string[];
 }
 
@@ -33,7 +34,6 @@ export class ProjectListComponent implements OnInit {
         // subscribe au bouton voir plus pour afficher les bons résultats
         this.projectService.voirPlus$.subscribe((nomProjet) => {
             this.nomProjet = nomProjet;
-            console.log("Nom reçu depuis la carte :", nomProjet);
             
             // Appel a l'api avec le bon projet
             const urlCordis = `http://localhost:4200/cordis/listOfProject?nomOrga=${encodeURIComponent(nomProjet)}`;
@@ -47,9 +47,6 @@ export class ProjectListComponent implements OnInit {
             forkJoin([cordisRequest, halRequest]).subscribe({
                 next: ([dataCordis, dataHal]) => {
                 this.projects = [...dataCordis, ...dataHal];;
-                console.log("Projets Hal récupérés :", this.projects[0]);
-                console.log("Projets Cordis récupérés :", this.projects[1]);
-
                 },
             });
         });

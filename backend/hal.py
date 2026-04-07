@@ -150,6 +150,7 @@ def getProjectsFromCollab(nomOrga, limite=5):
                     "teaser": d.get('label_s', "")[:200] + "...", # Un extrait de la citation
                     "description": abstract,
                     "date": date_prod,
+                    "cout" : "pas d'informations (hal)",
                     "allContributors": contributors
                 })
     except Exception as e:

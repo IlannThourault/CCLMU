@@ -4,19 +4,23 @@
     
     <p class="teaser">{{ project.teaser }}</p>
     
-    <div class="dates">
-        <span><b>Date :</b> {{ project.date }}</span>
-        </div>
-        <div id="liste-projets-section" class="project-card-container">
-
-            <div class="contributors-box">
-                <b>Contributeurs du projet :</b>
-                <ul>
-                    <li *ngFor="let c of project.allContributors">{{ c }}</li>
-                </ul>
-            </div>
-        </div>
+    <div class="infos">
+      <span><b>Date :</b> {{ project.date }}</span>
     </div>
+
+    <div class="infos">
+      <span><b>Financement :</b> {{ project.cout }}</span>
+    </div>
+
+    <div id="liste-projets-section" class="project-card-container">
+      <div class="contributors-box">
+          <b>Contributeurs du projet :</b>
+          <ul>
+              <li *ngFor="let c of project.allContributors">{{ c }}</li>
+          </ul>
+      </div>
+    </div>
+  </div>
 </div>
 
 <ng-template #noProject>
