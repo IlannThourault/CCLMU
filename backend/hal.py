@@ -143,14 +143,14 @@ def getProjectsFromCollab(nomOrga, limite=5):
                 
                 contributors = d.get("authStructName_s") or d.get("structName_s") or []
 
-
+                unique_contributors = sorted(list(set(contributors)))
                 listeProjects.append({
                     "title": title,
                     "teaser": d.get('label_s', "")[:200] + "...", # Un extrait de la citation
                     "description": abstract,
                     "date": date_prod,
                     "cout" : "pas d'informations (hal)",
-                    "allContributors": contributors
+                    "allContributors": unique_contributors
                 })
     except Exception as e:
         print(f"Erreur lors de la requête HAL : {e}")
