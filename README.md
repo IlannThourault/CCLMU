@@ -1,59 +1,117 @@
-## CCLMU - Carthograpie des Collaborations avec Le Mans Université
+# CCLMU - Collaborations de Le Mans Universités
 
-This project was generated using [Angular CLI](https://github.com/angular/angular-cli) version 21.1.0.
+## 📋 À propos du projet
 
-## Development server
+**CCLMU** est une application web interactive de visualisation des collaborations scientifiques au Mans. Elle permet d'explorer les projets de recherche sourcés depuis deux bases de données majeures :
 
-To start a local development server, run:
+- **CORDIS** : Community Research and Development Information Service (Projets de recherche européens)
+- **HAL** : Hyper Articles en Ligne (Publications scientifiques françaises)
+
+L'application affiche les organisations et leurs collaborations sur une carte interactive, en filtrant par dates et mots-clés.
+
+---
+
+## 🎯 Objectifs
+
+- Visualiser les organisations de recherche au Mans et leurs collaborations
+- Afficher les projets CORDIS (subventions européennes)
+- Lister les publications HAL (archives ouvertes scientifiques)
+- Filtrer les données par plage de dates et mots-clés
+- Présenter les informations de manière interactive et intuitive
+
+
+---
+
+## 🚀 Installation et configuration
+
+
+### 2️⃣ Installation du Backend (Python)
+
+```bash
+# Créer l'environnement virtuel Python
+cd backend
+python3 -m venv backend_venv
+
+# Activer l'environnement virtuel
+source backend_venv/bin/activate  # Linux/Mac
+# OU
+.\backend_venv\Scripts\activate   # Windows
+
+# Installer les dépendances Python
+pip install fastapi uvicorn requests python-dotenv
+```
+
+### 3️⃣ Configuration d'authentification (ScanR - optionnel)
+
+Certaines fonctionnalités nécessitent des identifiants :
+
+```bash
+# Créer le fichier .private_env à la racine ou dans backend/
+touch .private_env
+
+# Ajouter vos identifiants
+echo "SCANR_USERNAME=votre_username" >> .private_env
+echo "SCANR_PASSWORD=votre_password" >> .private_env
+```
+
+---
+
+## 🎮 Utilisation
+
+### Lancer l'application (local)
+
+#### Terminal 1 - Frontend Angular
 
 ```bash
 ng serve
 ```
 
-Once the server is running, open your browser and navigate to `http://localhost:4200/`. The application will automatically reload whenever you modify any of the source files.
+L'application est accessible à : **http://localhost:8080**
 
-## Code scaffolding
-
-Angular CLI includes powerful code scaffolding tools. To generate a new component, run :
+#### Terminal 2 - Backend FastAPI
 
 ```bash
-ng generate component component-name
+cd backend
+source backend_venv/bin/activate  # Activer l'environnement
+
+# Lancer le serveur FastAPI
+python -m uvicorn backend:app --reload --host 0.0.0.0 --port 8000
 ```
 
-For a complete list of available schematics (such as `components`, `directives`, or `pipes`), run :
+L'API est accessible à : **http://localhost:8000**
+Documentation Swagger : **http://localhost:8000/docs**
 
-```bash
-ng generate --help
-```
+---
 
-## Building
+## 📡 API Endpoints
 
-To build the project run:
+### Endpoints CORDIS
 
-```bash
-ng build
-```
+| Méthode | Endpoint | Description | Paramètres |
+|---------|----------|-------------|-----------|
+| GET | `/cordis/firstDate` | Date de début la plus ancienne | - |
+| GET | `/cordis/lastDate` | Date de fin la plus récente | - |
+| GET | `/cordis/firstDate/{year\|month\|day}` | Composante de date de début | - |
+| GET | `/cordis/lastDate/{year\|month\|day}` | Composante de date de fin | - |
+| GET | `/cordis/getAllLocalizationsFromDates` | Localisations filtrées | `deb`, `fin`, `keywords` |
+| GET | `/cordis/listOfProject` | Projets d'une organisation | `nomOrga` |
 
-This will compile your project and store the build artifacts in the `dist/` directory. By default, the production build optimizes your application for performance and speed.
+### Endpoints HAL
 
-## Running unit tests
+| Méthode | Endpoint | Description | Paramètres |
+|---------|----------|-------------|-----------|
+| GET | `/hal/firstDate/{year\|month}` | Date de première publication | - |
+| GET | `/hal/getCoordinatesFromDates` | Coordonnées GPS filtrées | `anneeMin`, `anneeMax`, `moisMin`, `moisMax` |
+| GET | `/hal/getDataFromFilters` | Publications filtrées | `anneeMin`, `anneeMax`, `moisMin`, `moisMax`, `keywords` |
+| GET | `/hal/getProjectsFromCollab` | Collaborations HAL | `nomOrga`, `limite` |
 
-To execute unit tests with the [Vitest](https://vitest.dev/) test runner, use the following command:
+---
 
-```bash
-ng test
-```
 
-## Running end-to-end tests
+## 👥 Contributeurs
 
-For end-to-end (e2e) testing, run:
+- **Développeurs** : Ilann Thourault / Lucas Reverbel--Longhi / Nathan Morin
+- **Année académique** : L3
+- **Institution** : Le Mans Université
 
-```bash
-ng e2e
-```
-
-Angular CLI does not come with an end-to-end testing framework by default. You can choose one that suits your needs.
-
-## Additional Resources
-
-For more information on using the Angular CLI, including detailed command references, visit the [Angular CLI Overview and Command Reference](https://angular.dev/tools/cli) page.
+---

@@ -46,7 +46,18 @@ export class ProjectListComponent implements OnInit {
             
             forkJoin([cordisRequest, halRequest]).subscribe({
                 next: ([dataCordis, dataHal]) => {
-                this.projects = [...dataCordis, ...dataHal];;
+                this.projects = [...dataCordis, ...dataHal];
+                
+                // Scroll vers la section des projets après chargement
+                setTimeout(() => {
+                    const element = document.getElementById('liste-projets-section');
+                    if (element) {
+                        element.scrollIntoView({ 
+                            behavior: 'smooth', 
+                            block: 'start'     
+                        });
+                    }
+                }, 100);
                 },
             });
         });

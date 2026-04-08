@@ -60,16 +60,6 @@ export class BarreRecherche {
 
   lancerRecherche(): void {
     this.rechercheService.lancerRechercheForcee();
-    console.log("Recherche lancée pour :", this.recherche);
-
-    setTimeout(() => {
-        const element = document.getElementById('liste-projets-section');
-        if (element) {
-        element.scrollIntoView({ 
-            behavior: 'smooth', 
-            block: 'start'     
-        });
-        }
-    }, 100);
-}
+    console.log("Recherche lancée pour :", this.rechercheService.motsClesTexte());
+  }
 }
