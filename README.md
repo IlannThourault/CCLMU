@@ -1,6 +1,6 @@
 # CCLMU - Collaborations de Le Mans Universités
 
-## 📋 À propos du projet
+## À propos du projet
 
 **CCLMU** est une application web interactive de visualisation des collaborations scientifiques au Mans. Elle permet d'explorer les projets de recherche sourcés depuis deux bases de données majeures :
 
@@ -11,7 +11,7 @@ L'application affiche les organisations et leurs collaborations sur une carte in
 
 ---
 
-## 🎯 Objectifs
+## Objectifs
 
 - Visualiser les organisations de recherche au Mans et leurs collaborations
 - Afficher les projets CORDIS (subventions européennes)
@@ -22,68 +22,41 @@ L'application affiche les organisations et leurs collaborations sur une carte in
 
 ---
 
-## 🚀 Installation et configuration
+## Installation et configuration
 
-
-### 2️⃣ Installation du Backend (Python)
-
-```bash
-# Créer l'environnement virtuel Python
-cd backend
-python3 -m venv backend_venv
-
-# Activer l'environnement virtuel
-source backend_venv/bin/activate  # Linux/Mac
-# OU
-.\backend_venv\Scripts\activate   # Windows
-
-# Installer les dépendances Python
-pip install fastapi uvicorn requests python-dotenv
-```
-
-### 3️⃣ Configuration d'authentification (ScanR - optionnel)
+###  Configuration d'authentification avec ScanR
 
 Certaines fonctionnalités nécessitent des identifiants :
 
 ```bash
-# Créer le fichier .private_env à la racine ou dans backend/
-touch .private_env
-
-# Ajouter vos identifiants
-echo "SCANR_USERNAME=votre_username" >> .private_env
-echo "SCANR_PASSWORD=votre_password" >> .private_env
+# Dans .private_env
+SCANR_USERNAME=votre_username
+SCANR_PASSWORD=votre_password
 ```
 
 ---
 
-## 🎮 Utilisation
+## Utilisation
 
 ### Lancer l'application (local)
 
-#### Terminal 1 - Frontend Angular
+#### Backend Python
 
 ```bash
-ng serve
+bash backend_launcher.sh
 ```
 
-L'application est accessible à : **http://localhost:8080**
+L'addresse de l'API serveur est inscrite dans .public_env.
 
-#### Terminal 2 - Backend FastAPI
+#### Frontend Angular
 
 ```bash
-cd backend
-source backend_venv/bin/activate  # Activer l'environnement
-
-# Lancer le serveur FastAPI
-python -m uvicorn backend:app --reload --host 0.0.0.0 --port 8000
+npm start
 ```
-
-L'API est accessible à : **http://localhost:8000**
-Documentation Swagger : **http://localhost:8000/docs**
 
 ---
 
-## 📡 API Endpoints
+## API Endpoints
 
 ### Endpoints CORDIS
 
