@@ -123,7 +123,7 @@ def getDataFromFilters(anneeMin, anneeMax, moisMin, moisMax, keyword1=None, keyw
 #de base à 5 pour limiter le temps de réponse de l'api
 def getProjectsFromCollab(nomOrga, limite=5):
     #retourne les porjets en collaboration d'une organisation avec le mans (même format que cordis)
-    query = f'structName_s:"{nomOrga}"'
+    query = f'structName_t:"{nomOrga}" AND structName_t:"Mans"'
 
     fields = "title_s,abstract_s,producedDate_s,authFullName_s,label_s,authStructName_s,structName_s"
     url = f"https://api.archives-ouvertes.fr/search/?q={query}&fl={fields}&rows={limite}&wt=json"
@@ -134,7 +134,6 @@ def getProjectsFromCollab(nomOrga, limite=5):
         response = requests.get(url)
         if response.status_code == 200:
             docs = response.json().get('response', {}).get('docs', [])
-            
             for d in docs:
                 title = d.get('title_s', ["Sans titre"])[0]
                 abstract = d.get('abstract_s', ["Pas de résumé disponible"])[0]
@@ -157,5 +156,4 @@ def getProjectsFromCollab(nomOrga, limite=5):
         print(f"Erreur lors de la requête HAL : {e}")
 
     return listeProjects
-
 
