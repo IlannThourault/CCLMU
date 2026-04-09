@@ -1,5 +1,5 @@
 # CCLMU - Collaborations de Le Mans Universités
-
+	
 ## À propos du projet
 
 **CCLMU** est une application web interactive de visualisation des collaborations scientifiques au Mans. Elle permet d'explorer les projets de recherche sourcés depuis deux bases de données majeures :
