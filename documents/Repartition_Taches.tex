@@ -1,0 +1,63 @@
+\documentclass[12pt]{article}
+\usepackage[hidelinks]{hyperref}
+\usepackage{graphicx}
+
+\begin{document}
+
+\begin{center}
+
+\begin{minipage}{0.25\textwidth}
+    \centering
+    \includegraphics[width=\linewidth]{LMU.png}
+\end{minipage}
+\hfill
+\begin{minipage}{0.3\textwidth}
+    \centering
+    \includegraphics[width=\linewidth]{IC2.png}
+\end{minipage}
+
+\vspace{1cm}
+
+{\LARGE \textbf{Répartition des tâches}}\\
+{\large \textbf{Cartographie Collaborations Le Mans Université}}\\
+{\large Le Mans Université}\\
+
+\vspace{1cm}
+
+{\small Rédigé par :}\\
+{\small MORIN Nathan}\\
+{\small REVERBEL--LONGHI Lucas}\\
+{\small THOURAULT Ilann}\\
+
+\end{center}
+
+\section{Back-end}
+\subsection{Nathan MORIN}
+\par Nathan s'est occupé du chargement des données de l'API \textbf{Cordis}. Ainsi que du traitement de ces données et de leurs stockages en mémoire. De plus, Nathan a configuré les points d'accès API, pour rendre ces données accessibles depuis le \underline{\hyperref[sec:frontend]{front-end}}.  
+\subsection{Ilann THOURAULT}
+\par Ilann s'est occupé du chargement des données de l'API \textbf{HAL}. Ainsi que du traitement de ces données et de leurs stockages en mémoire. De plus, Ilann a configuré les points d'accès API, pour rendre ces données accessibles depuis le \underline{\hyperref[sec:frontend]{front-end}}. Un soin particulier, a été apporté par Ilann sur la gestion des mots-clefs. 
+\subsection{Lucas REVERBEL--LONGHI}
+\par Lucas s'est occupé de l'architecture back-end. C'est-à-dire, du choix de \textbf{Python}, permettant de simplifier le futur développement du projet vers de l'IA, et de librairies comme \textbf{Uvicorn}, \textbf{FastAPI} ou \textbf{Request}. Ainsi que de la construction et de l'automatisation du serveur back-end, à travers la configuration du serveur et de l'automatisation de l'environnement \textbf{Python}. 
+
+\section{Front-end}
+\label{sec:frontend}
+
+\par Notre application \textbf{SPA}\textit{(Single Page Application)} est composé de quatre composants :
+\begin{itemize}
+    \item {\large Liste des collaborations}\label{item:liste} : Ce composant s'affiche en dessous de la \underline{\hyperref[item:carte]{carte}} une fois qu'un lieu a été sélectionné sur celui-ci. L'utilisateur peut ensuite observer la liste de toutes les collaborations avec le lieu qu'il a choisi. 
+    \item {\large Carte}\label{item:carte} : La carte est le seul point d'entrée de la liste des collaborations. Elle permet à l'utilisateur d'effectuer une recherche géographique. De plus, elle doit s'adapter au \underline{\hyperref[item:slider]{slider}} et au \underline{\hyperref[item:champ]{champ de recherche}}.
+    \item {\large Slider}\label{item:slider} : Le slider permet d'affiner la carte grâce à une sélection temporelle.
+    \item {\large Champ de recherche}\label{item:champ} : À partir des mots-clefs provenant des différentes APIs, le composant propose une sélection sur la \underline{\hyperref[item:carte]{carte}}, basé sur les thèmes abordés par le contenu des collaborations.
+\end{itemize}
+
+\subsection{Nathan MORIN}
+Nathan réalisa le \underline{\hyperref[item:slider]{slider}}. Ce composant se construit sur les dates optimums, disponibles sur les différentes APIs. Sa création repose sur une compréhension profonde des mécaniques d'événements \textbf{Angular}, pour permettre une glissade naturelle.
+Nathan a aussi réalisé la \underline{\hyperref[item:liste]{liste des collaborations}} qui récuppèrent toutes les informations sur les collaborations pour les afficher sous forme de liste, à l'utilisateur.
+
+\subsection{Ilann THOURAULT}
+Ilann s'est occupé du \underline{\hyperref[item:champ]{champ de recherche}}, permettant d'inscrire des mots-clefs et de les retirer ensuite si besoin.
+
+\subsection{Lucas REVERBEL--LONGHI}
+Lucas a réussi à utiliser \textbf{Leaflet} en \textbf{TypeSctipt} pour réaliser la \underline{\hyperref[item:carte]{carte}}, qui est pourtant principalement utilisable en \textbf{JavaScript}. De plus, Lucas implémenta la gestion des lieux ainsi que de l'affichage des descriptions des informations des lieux.
+
+\end{document}
