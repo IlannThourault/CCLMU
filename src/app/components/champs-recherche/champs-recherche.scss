@@ -1,5 +1,11 @@
 
-
+/* Le rectangle autour de la valeur */
+.champ-valeur-statique {
+    padding: 8px 12px;
+    border: 2px solid #007bff; /* Couleur de bordure pour l'effet rectangle */
+    border-radius: 4px;
+    color: #333;
+}
 
 .btn-supprimer {
     background: none;
@@ -8,69 +14,4 @@
     cursor: pointer;
     font-weight: bold;
     padding: 5px;
-}
-
-.champs-recherche-container {
-    height: 180px;      /* Fixe la taille : elle ne bougera plus jamais */
-    width: 100%;        /* Prend toute la largeur de son parent */
-    overflow-y: auto;   /* Active le scroll vertical uniquement si nécessaire */
-    padding: 15px;
-    border: 1px solid color-mix(in srgb, var(--gray-400) 20%, transparent);
-    background-color: white;
-    border-radius: 8px;
-    box-shadow: 0 2px 4px rgba(0,0,0,0.05);
-    box-sizing: border-box; /* Important pour que le padding ne s'ajoute pas à la hauteur */
-}
-
-.liste-champs {
-    display: flex;
-    flex-wrap: wrap;    
-    gap: 8px;
-    margin-top: 10px;
-}
-
-.champ-item-inline {
-    display: inline-flex;
-    align-items: center;
-    background-color: #4F6814;
-    border-radius: 20px; 
-    padding: 4px 12px;
-    gap: 8px;
-    transition: all 0.2s ease;
-}
-
-.champ-valeur {
-    font-size: 0.9rem;
-    color:#EDEBE5;
-    font-weight: 500;
-}
-
-.btn-supprimer-inline {
-    background: none;
-    border: none;
-    color: #EDEBE5;
-    cursor: pointer;
-    font-size: 1rem;
-    padding: 0;
-    display: flex;
-    align-items: center;
-    justify-content: center;
-}
-
-.champ-item {
-    background: #f8f9fa;
-    border-radius: 6px;
-    padding: 10px;
-    border: 1px solid #eee;
-}
-
-/* On garde votre style bleu pour la valeur */
-.champ-valeur-statique {
-    padding: 4px 8px;
-    border: 1px solid var(--bright-blue); 
-    border-radius: 4px;
-    color: #333;
-    font-size: 0.9rem;
-    display: inline-block;
-    margin-top: 5px;
 }

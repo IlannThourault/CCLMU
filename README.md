@@ -1,4 +1,4 @@
-# CCLMU - Collaborations de Le Mans Universités
+## CCLMU - Carthograpie des Collaborations avec Le Mans Université
 
 ## À propos du projet
 

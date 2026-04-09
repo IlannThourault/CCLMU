@@ -1,104 +1,23 @@
-
 .search-bar-container {
     display: flex;
-    width: 100%;      /* Force le conteneur à prendre toute la largeur */
-    justify-content: center; 
+    gap: 1rem; /* espace entre les barres */
     margin-bottom: 1rem;
 }
 
 .search-bar {
     display: flex;
     gap: 0.5rem;
-    flex: 1;          /* Utilise tout l'espace du container */
-    width: 100%;      /* Force la largeur */
-    max-width: 900px; /* Ajustez cette valeur pour la taille désirée */
-
-    .autocomplete-wrapper {
-        flex: 1;
-        display: flex;
-        
-        input {
-            width: 100%; /* L'input occupe tout le wrapper */
-            flex: 1;
-            padding: 0.6rem;
-            font-size: 1.1rem; /* Un peu plus grand pour le confort */
-            outline: none;
-            border-color: #4F6814;     /* ← Votre vert au focus */
-            border-width: 1px;
-        }
-    }
-}
-.autocomplete-wrapper {
-    position: relative; /* Référentiel pour la liste absolute */
     flex: 1;
-}
 
-
-
-.suggestions-list {
-    position: absolute;
-    top: 100%; 
-    left: 0;
-    right: 0;
-    background: white;
-    border: 1px solid #ccc;
-    border-top: none;
-    list-style: none;
-    padding: 0;
-    margin: 0;
-    z-index: 2000; /* Très haut pour passer devant la carte */
-    max-height: 150px;
-    overflow-y: auto;
-    box-shadow: 0 4px 6px rgba(0,0,0,0.1);
-
-    li {
-        padding: 8px 12px;
-        cursor: pointer;
-        color: #333;
-
-        &:hover {
-            background-color: #4F6814;
-            color: white;
-        }
+    input {
+        flex: 1;
+        padding: 0.4rem;
+        font-size: 1rem;
     }
-}
 
-/* --- CSS AJOUTÉ POUR LA LOUPE --- */
-
-.autocomplete-wrapper {
-  position: relative; /* Indispensable pour le placement du bouton */
-  display: flex;
-  align-items: center;
-}
-
-.btn-loupe-search {
-  position: absolute;
-  right: 10px;         /* Ajuste selon ton padding d'input */
-  background: #4F6814; /* Ton vert */
-  color: #EDEBE5;      /* Ton beige */
-  border: none;
-  border-radius: 12px;
-  width: 150px;
-  height: 32px;
-  cursor: pointer;
-  display: flex;
-  align-items: center;
-  justify-content: center;
-  font-size: 1rem;
-  z-index: 10;
-  transition: transform 0.2s ease;
-
-  &:hover {
-    transform: scale(1.1);
-  }
-
-  &:active {
-    transform: scale(0.9);
-  }
-}
-
-/* Optionnel : ajoute un peu de padding à droite de ton input original 
-   pour que le texte ne passe pas SOUS la loupe */
-input {
-  padding-right: 45px !important;
+    button {
+        padding: 0.4rem 0.8rem;
+        font-size: 1rem;
+        cursor: pointer;
+    }
 }

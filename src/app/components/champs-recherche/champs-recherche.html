@@ -1,22 +1,25 @@
 <div class="champs-recherche-container">
-  <h3>Filtres ajoutés ({{ champs().length }}/2)</h3>
-  
-  <div *ngIf="champs().length === 0" class="message-vide">
-    <p>Aucun filtre ajouté.</p>
-  </div>
-
-  <div class="liste-champs" *ngIf="champs().length > 0">
-    <div *ngFor="let champ of champs()" class="champ-item-inline">
-      <span class="champ-valeur">
-        {{ champ.valeur | titlecase }}
-      </span>
-      <button 
-        (click)="supprimerChamp(champ.valeur)"
-        class="btn-supprimer-inline"
-        title="Supprimer"
-      >
-        ✕
-      </button>
+    <h3>Champs de recherche ajoutés ({{ nombreChamps() }})</h3>
+    
+    <div *ngIf="champs().length === 0" class="message-vide">
+      <p>Aucun champ de recherche ajouté.</p>
     </div>
-  </div>
+  
+    <div class="liste-champs" *ngIf="champs().length > 0">
+      <div *ngFor="let champ of champs()" class="champ-item">
+        <div class="champ-header">
+          <span class="champ-libelle">{{ champ.libelle }}</span>
+          <button 
+            (click)="supprimerCham+p(champ.id)"
+            class="btn-supprimer"
+            title="Supprimer ce champ"
+          >
+            ✕
+          </button>
+        </div>
+        <div class="champ-valeur-statique">
+          {{ champ.valeur }}
+        </div>
+      </div>
+    </div>
 </div>
